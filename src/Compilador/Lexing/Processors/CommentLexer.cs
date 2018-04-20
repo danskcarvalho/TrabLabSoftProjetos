@@ -20,7 +20,7 @@ namespace Compilador.Lexing
                 int start = offset;
                 while (CharAt(offset) != '\n' && CharAt(offset) != '\0')
                     offset++;
-                return new Token(TokenType.Comment, GetLocation(start));
+                return new Token(null, TokenType.Comment, GetLocation(start));
             }
             else
                 return null;

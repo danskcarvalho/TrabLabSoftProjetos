@@ -29,6 +29,9 @@ namespace Compilador.Driving
             {
                 DisplayError("erro desconhecido");
             }
+#if DEBUG
+            Console.ReadKey(true);
+#endif
         }
 
         private static void DisplayMessage(string message)

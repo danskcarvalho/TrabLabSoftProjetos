@@ -33,8 +33,9 @@ namespace Compilador.Lexing
                     throw new GrammarException(GetLocation(offset), "string não finalizada");
 
                 var value = GetValue(GetLocation(start + 1), start + 1, offset - 1);
+                var source = Substring(start, offset);
                 offset++;
-                return new Token(TokenType.StringLiteral, value, GetLocation(start));
+                return new Token(source, TokenType.StringLiteral, value, GetLocation(start));
             }
             else
                 return null;

@@ -27,37 +27,37 @@ namespace Compilador.Lexing
             switch (current)
             {
                 case '/':
-                    return new Token(TokenType.DivOperator, GetLocation(offset));
+                    return new Token("/", TokenType.DivOperator, GetLocation(offset));
                 case '=':
-                    return new Token(TokenType.EqOperator, GetLocation(offset));
+                    return new Token("=", TokenType.EqOperator, GetLocation(offset));
                 case '|':
-                    return new Token(TokenType.PipeOperator, GetLocation(offset));
+                    return new Token("|", TokenType.PipeOperator, GetLocation(offset));
                 case '<':
-                    return new Token(TokenType.LtOperator, GetLocation(offset));
+                    return new Token("<", TokenType.LtOperator, GetLocation(offset));
                 case '>':
-                    return new Token(TokenType.GtOperator, GetLocation(offset));
+                    return new Token(">", TokenType.GtOperator, GetLocation(offset));
                 case '[':
-                    return new Token(TokenType.OSqrOperator, GetLocation(offset));
+                    return new Token("[", TokenType.OSqrOperator, GetLocation(offset));
                 case ']':
-                    return new Token(TokenType.ESqrOperator, GetLocation(offset));
+                    return new Token("]", TokenType.ESqrOperator, GetLocation(offset));
                 case '-':
-                    return new Token(TokenType.MinusOperator, GetLocation(offset));
+                    return new Token("-", TokenType.MinusOperator, GetLocation(offset));
                 case '*':
-                    return new Token(TokenType.MultOperator, GetLocation(offset));
+                    return new Token("*", TokenType.MultOperator, GetLocation(offset));
                 case '+':
-                    return new Token(TokenType.PlusOperator, GetLocation(offset));
+                    return new Token("+", TokenType.PlusOperator, GetLocation(offset));
                 case '(':
-                    return new Token(TokenType.ORoundOperator, GetLocation(offset));
+                    return new Token("(", TokenType.ORoundOperator, GetLocation(offset));
                 case ')':
-                    return new Token(TokenType.ERoundOperator, GetLocation(offset));
+                    return new Token(")", TokenType.ERoundOperator, GetLocation(offset));
                 case '?':
-                    return new Token(TokenType.QtOperator, GetLocation(offset));
+                    return new Token("?", TokenType.QtOperator, GetLocation(offset));
                 case '{':
-                    return new Token(TokenType.OCurlyOperator, GetLocation(offset));
+                    return new Token("{", TokenType.OCurlyOperator, GetLocation(offset));
                 case '}':
-                    return new Token(TokenType.ECurlyOperator, GetLocation(offset));
+                    return new Token("}", TokenType.ECurlyOperator, GetLocation(offset));
                 case '@':
-                    return new Token(TokenType.AtOperator, GetLocation(offset));
+                    return new Token("@", TokenType.AtOperator, GetLocation(offset));
                 default:
                     return null;
             }

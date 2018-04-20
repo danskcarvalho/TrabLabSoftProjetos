@@ -425,8 +425,15 @@ namespace Compilador.Parsing
         {
             return Peek().Location;
         }
-        Exception GrammarException(string message = "sintaxe inválida")
+        Exception GrammarException(string message = null)
         {
+            if (message == null)
+            {
+                if (Peek().Source != null)
+                    message = $"sintaxe inválida próximo de {Peek().Source}";
+                else
+                    message = "sintaxe inválida";
+            }
             return new GrammarException(CurrentLocation(), message);
         }
 
@@ -486,7 +493,7 @@ namespace Compilador.Parsing
             if (scopedTokens[scopedTokens.Count - 1].Type == TokenType.Eof)
                 scopedTokens.RemoveAt(scopedTokens.Count - 1);
 
-            scopedTokens.Add(new Token(TokenType.Eos, Peek(scopedTokens.Count).Location));
+            scopedTokens.Add(new Token(null, TokenType.Eos, Peek(scopedTokens.Count).Location));
             Scopes.Add(Tuple.Create(CurrentToken, scopedTokens));
             try
             {

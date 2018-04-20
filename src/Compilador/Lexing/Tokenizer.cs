@@ -36,7 +36,7 @@ namespace Compilador.Lexing
                         break;
                 }
                 if (lastToken == null)
-                    throw new GrammarException(mapping.GetLocation(offset), "caractere inesperado");
+                    throw new GrammarException(mapping.GetLocation(offset), $"caractere inesperado {source[offset]}");
 
                 result.Add(lastToken);
             }

@@ -12,17 +12,20 @@ namespace Compilador.Lexing
         public TokenType Type { get; private set; }
         public string Value { get; private set; }
         public Location Location { get; private set; }
+        public string Source { get; private set; }
 
-        public Token(TokenType tokenType, Location location)
+        public Token(string source, TokenType tokenType, Location location)
         {
             this.Type = tokenType;
             this.Location = location;
+            this.Source = source;
         }
-        public Token(TokenType tokenType, string value, Location location)
+        public Token(string source, TokenType tokenType, string value, Location location)
         {
             this.Type = tokenType;
             this.Value = value;
             this.Location = location;
+            this.Source = source;
         }
 
         public override string ToString()

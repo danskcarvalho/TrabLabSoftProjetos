@@ -21,7 +21,7 @@ namespace Compilador.Lexing
                 while (char.IsWhiteSpace(CharAt(offset)))
                     offset++;
                 
-                return new Token(TokenType.Whitespace, GetLocation(start));
+                return new Token(null, TokenType.Whitespace, GetLocation(start));
             }
             else
                 return null;

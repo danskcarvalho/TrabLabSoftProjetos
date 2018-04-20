@@ -23,9 +23,9 @@ namespace Compilador.Lexing
 
                 var value = Substring(start, offset - 1);
                 if (value == "option")
-                    return new Token(TokenType.OptionKeyword, GetLocation(start));
+                    return new Token("option", TokenType.OptionKeyword, GetLocation(start));
                 else
-                    return new Token(TokenType.Identifier, value, GetLocation(start));
+                    return new Token(value, TokenType.Identifier, value, GetLocation(start));
             }
             else
                 return null;

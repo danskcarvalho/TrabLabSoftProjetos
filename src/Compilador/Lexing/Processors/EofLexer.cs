@@ -18,7 +18,7 @@ namespace Compilador.Lexing
             if (CharAt(offset) == '\0')
             {
                 offset++;
-                return new Token(TokenType.Eof, GetLocation(offset - 1));
+                return new Token(null, TokenType.Eof, GetLocation(offset - 1));
             }
             else
                 return null;

@@ -19,10 +19,10 @@ namespace Compilador.Lexing
             {
                 offset += 2;
                 var next = CharAt(offset - 1);
-                if (next == '\0')
-                    throw new GrammarException(GetLocation(offset - 1), "sequência de escape inválida");
+                if (next == '\0' || next == '\n')
+                    throw new GrammarException(GetLocation(offset - 1), $"sequência de escape inválida");
                 var value = GetValue(next);
-                return new Token(TokenType.EscapeSequence, value, GetLocation(offset - 1));
+                return new Token($"\\{CharAt(offset - 1)}", TokenType.EscapeSequence, value, GetLocation(offset - 1));
             }
             else
                 return null;
