@@ -1,0 +1,121 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace Compilador.Lalr
+{
+    public class LalrContext
+    {
+        public static LalrTable ComputeTable(GrammarProductionDatabase db){
+            var ctx = new LalrContext(db);
+            ctx.ComputeStates();
+            return ctx.mTable;
+        }
+
+        private GrammarProductionDatabase mDatabase;
+        private LalrContext(GrammarProductionDatabase db)
+        {
+            this.mDatabase = db;
+        }
+
+        private Dictionary<LalrItemSet, int> mItemsByIndex;
+        private List<LalrItemSet> mStates;
+        private HashSet<LalrItemSet> mCurrentItems;
+        private HashSet<LalrItemSet> mNextItems;
+        private Dictionary<Tuple<int, Symbol>, int> mRecordedGotos;
+        private LalrTable mTable;
+
+        private void ComputeStates(){
+            mItemsByIndex = new Dictionary<LalrItemSet, int>();
+            mStates = new List<LalrItemSet>();
+            mCurrentItems = new HashSet<LalrItemSet>();
+            mNextItems = new HashSet<LalrItemSet>();
+            mRecordedGotos = new Dictionary<Tuple<int, Symbol>, int>();
+
+            mStates.Add(new LalrItemSet(new LalrItem[] {
+                new LalrItem(mDatabase[NonterminalSymbol.StartingSymbol].First(), 0, TerminalSymbol.Eof)
+            }));
+            mItemsByIndex.Add(mStates[0].ToCoreSet(), 0);
+            mCurrentItems.Add(mStates[0]);
+
+            while (mCurrentItems.Count != 0)
+            {
+                foreach (var iset in mCurrentItems)
+                {
+                    Expand(iset);
+                }
+
+                mCurrentItems.Clear();
+                mCurrentItems.UnionWith(mNextItems);
+                mNextItems.Clear();
+            }
+
+            CreateTable();
+        }
+
+        private void CreateTable()
+        {
+            List<LalrState> stateList = new List<LalrState>();
+            mTable = new LalrTable(stateList);
+
+            for (int i = 0; i < mStates.Count; i++)
+            {
+                var actions = new Dictionary<Symbol, ReadOnlyCollection<LalrAction>>();
+                var tempActions = new Dictionary<Symbol, List<LalrAction>>();
+                var st = new LalrState(actions);
+                stateList.Add(st);
+
+                var currentItem = mStates[i].Closure(mDatabase);
+                foreach (var item in currentItem)
+                {
+                    if (!tempActions.ContainsKey(item.CurrentSymbol))
+                        tempActions[item.CurrentSymbol] = new List<LalrAction>();
+                    
+                    if (!item.AtEnd && item.CurrentSymbol is TerminalSymbol)
+                    {
+                        tempActions[item.CurrentSymbol].Add(new LalrShift(mRecordedGotos[Tuple.Create(i, item.CurrentSymbol)], mTable));
+                    }
+                    else if(item.AtEnd && item.Production.Head == NonterminalSymbol.StartingSymbol){
+                        tempActions[TerminalSymbol.Eof].Add(new LalrAccept());
+                    }
+                    else if(item.AtEnd){
+                        tempActions[item.Lookahead].Add(new LalrReduce(item.Production));
+                    }
+                    else {
+                        if (tempActions.ContainsKey(item.CurrentSymbol))
+                            continue;
+                        tempActions[item.CurrentSymbol].Add(new LalrGoto(mRecordedGotos[Tuple.Create(i, item.CurrentSymbol)], mTable));
+                    }
+                }
+
+                foreach (var act in tempActions)
+                {
+                    actions.Add(act.Key, act.Value.AsReadOnly());
+                }
+            }
+        }
+
+        private void Expand(LalrItemSet iset)
+        {
+            var thisIndex = mItemsByIndex[iset];
+
+            var performGoto = iset.Goto(mDatabase);
+            foreach (var item in performGoto)
+            {
+                var cs = item.Value.ToCoreSet();
+                if(mItemsByIndex.ContainsKey(cs)){
+                    var index = mItemsByIndex[cs];
+                    mStates[index] = LalrItemSet.Merge(mStates[index], item.Value);
+                    mRecordedGotos[Tuple.Create(thisIndex, item.Key)] = index;
+                }
+                else {
+                    mStates.Add(item.Value);
+                    mItemsByIndex.Add(cs, mStates.Count - 1);
+                    mNextItems.Add(item.Value);
+                    mRecordedGotos[Tuple.Create(thisIndex, item.Key)] = mStates.Count - 1; 
+                }
+            }
+        }
+    }
+}
