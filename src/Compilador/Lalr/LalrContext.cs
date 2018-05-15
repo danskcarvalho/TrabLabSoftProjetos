@@ -12,13 +12,13 @@ namespace Compilador.Lalr
             ctx.ComputeStates();
             return ctx.mTable;
         }
-
-        private GrammarProductionDatabase mDatabase;
+        
         private LalrContext(GrammarProductionDatabase db)
         {
             this.mDatabase = db;
         }
 
+        private GrammarProductionDatabase mDatabase;
         private Dictionary<LalrItemSet, int> mItemsByIndex;
         private List<LalrItemSet> mStates;
         private HashSet<LalrItemSet> mCurrentItems;
@@ -69,22 +69,30 @@ namespace Compilador.Lalr
                 var currentItem = mStates[i].Closure(mDatabase);
                 foreach (var item in currentItem)
                 {
-                    if (!tempActions.ContainsKey(item.CurrentSymbol))
-                        tempActions[item.CurrentSymbol] = new List<LalrAction>();
-                    
                     if (!item.AtEnd && item.CurrentSymbol is TerminalSymbol)
                     {
+                        if (!tempActions.ContainsKey(item.CurrentSymbol))
+                            tempActions[item.CurrentSymbol] = new List<LalrAction>();
+
                         tempActions[item.CurrentSymbol].Add(new LalrShift(mRecordedGotos[Tuple.Create(i, item.CurrentSymbol)], mTable));
                     }
                     else if(item.AtEnd && item.Production.Head == NonterminalSymbol.StartingSymbol){
+                        if (!tempActions.ContainsKey(TerminalSymbol.Eof))
+                            tempActions[TerminalSymbol.Eof] = new List<LalrAction>();
+
                         tempActions[TerminalSymbol.Eof].Add(new LalrAccept());
                     }
                     else if(item.AtEnd){
+                        if (!tempActions.ContainsKey(item.Lookahead))
+                            tempActions[item.Lookahead] = new List<LalrAction>();
+
                         tempActions[item.Lookahead].Add(new LalrReduce(item.Production));
                     }
                     else {
                         if (tempActions.ContainsKey(item.CurrentSymbol))
                             continue;
+
+                        tempActions[item.CurrentSymbol] = new List<LalrAction>();
                         tempActions[item.CurrentSymbol].Add(new LalrGoto(mRecordedGotos[Tuple.Create(i, item.CurrentSymbol)], mTable));
                     }
                 }

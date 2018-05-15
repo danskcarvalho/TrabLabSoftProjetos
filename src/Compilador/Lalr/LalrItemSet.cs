@@ -26,7 +26,7 @@ namespace Compilador.Lalr
                     return false;
             }
 
-            return false;
+            return true;
         }
 
         public override bool Equals(object obj)

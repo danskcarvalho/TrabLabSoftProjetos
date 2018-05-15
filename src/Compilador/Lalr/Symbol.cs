@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Compilador.Lalr
 {
-    public abstract class Symbol : IComparable<Symbol>, IComparable
+    public abstract class Symbol : IComparable<Symbol>
     {
         public static bool operator==(Symbol a, Symbol b){
             if (object.ReferenceEquals(a, b))
