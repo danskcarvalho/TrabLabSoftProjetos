@@ -35,7 +35,7 @@ namespace Compilador.Lalr
             if (GetType() != other.GetType())
                 return string.Compare(this.GetType().FullName, other.GetType().FullName, StringComparison.Ordinal);
 
-            return (this as IComparable).CompareTo(other);
+            return this.CompareTo((object)other);
         }
 
         public abstract int CompareTo(object obj);

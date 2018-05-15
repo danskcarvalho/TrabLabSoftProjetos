@@ -36,7 +36,7 @@ namespace Compilador.Lalr
             return IsIdentifier(Name) ? Name : (Name == Eof.Name ? "$eof" : $"'{Name}'");
         }
 
-        private static bool IsIdentifier(string name) => char.IsLower(name[0]) && name.All(c => char.IsLetterOrDigit(c));
+        private static bool IsIdentifier(string name) => char.IsLetter(name[0]) && name.All(c => char.IsLetterOrDigit(c));
 
         public int CompareTo(TerminalSymbol other)
         {

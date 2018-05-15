@@ -58,7 +58,7 @@ namespace Compilador.Lalr
             if (other == null)
                 return 1;
 
-            var cp = Production.CompareTo(other);
+            var cp = Production.CompareTo(other.Production);
             if (cp != 0)
                 return cp;
             cp = ParsingPoint - other.ParsingPoint;

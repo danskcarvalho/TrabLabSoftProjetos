@@ -74,6 +74,9 @@ namespace Compilador.Lalr
                         if (!tempActions.ContainsKey(item.CurrentSymbol))
                             tempActions[item.CurrentSymbol] = new List<LalrAction>();
 
+                        if (tempActions[item.CurrentSymbol].Any(a => a is LalrShift))
+                            continue;
+
                         tempActions[item.CurrentSymbol].Add(new LalrShift(mRecordedGotos[Tuple.Create(i, item.CurrentSymbol)], mTable));
                     }
                     else if(item.AtEnd && item.Production.Head == NonterminalSymbol.StartingSymbol){
@@ -85,6 +88,9 @@ namespace Compilador.Lalr
                     else if(item.AtEnd){
                         if (!tempActions.ContainsKey(item.Lookahead))
                             tempActions[item.Lookahead] = new List<LalrAction>();
+
+                        if (tempActions[item.Lookahead].Any(a => a is LalrReduce && ((LalrReduce)a).Production == item.Production))
+                            continue;
 
                         tempActions[item.Lookahead].Add(new LalrReduce(item.Production));
                     }
@@ -106,7 +112,7 @@ namespace Compilador.Lalr
 
         private void Expand(LalrItemSet iset)
         {
-            var thisIndex = mItemsByIndex[iset];
+            var thisIndex = mItemsByIndex[iset.ToCoreSet()];
 
             var performGoto = iset.Goto(mDatabase);
             foreach (var item in performGoto)

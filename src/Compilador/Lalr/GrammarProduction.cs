@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Compilador.Lalr
 {
     public class GrammarProduction : IEquatable<GrammarProduction>, IComparable<GrammarProduction>, IComparable
@@ -38,10 +40,10 @@ namespace Compilador.Lalr
         {
             if (other == null)
                 return 1;
-            var cp = this.Head.CompareTo(other);
+            var cp = this.Head.CompareTo(other.Head);
             if (cp != 0)
                 return cp;
-            return this.Body.CompareTo(other);
+            return this.Body.CompareTo(other.Body);
         }
 
         public int CompareTo(object obj)
@@ -65,6 +67,26 @@ namespace Compilador.Lalr
             if (object.ReferenceEquals(a, null) || object.ReferenceEquals(b, null))
                 return true;
             return !a.Equals(b);
+        }
+
+        public static GrammarProduction Create(string head, string bnf)
+        {
+            var tokenized = bnf.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            List<Symbol> symbols = new List<Symbol>();
+
+            foreach (var tk in tokenized)
+            {
+                symbols.Add(CreateSymbol(tk));
+            }
+            return new GrammarProduction(new NonterminalSymbol(head), new SymbolString(symbols));
+        }
+
+        private static Symbol CreateSymbol(string tk)
+        {
+            if (tk.StartsWith("<"))
+                return new NonterminalSymbol(tk.Substring(1, tk.Length - 2));
+            else
+                return new TerminalSymbol(tk);
         }
     }
 }
