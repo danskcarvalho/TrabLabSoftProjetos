@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class CharsetRegexGrammar : GrammarRegex
+    public class CharsetGrammar : Regex
     {
         public string CharsetName { get; private set; }
-        public CharsetRegexGrammar(string charsetName, Location location) : base(location)
+        public CharsetGrammar(string charsetName, Location location) : base(location)
         {
             this.CharsetName = charsetName;
         }

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public abstract class GrammarRegex
+    public abstract class Regex
     {
         public Location Location { get; private set; }
 
-        public GrammarRegex(Location location)
+        public Regex(Location location)
         {
             this.Location = location;
         }

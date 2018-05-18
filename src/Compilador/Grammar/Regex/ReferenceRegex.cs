@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class AtGrammarRegex : GrammarRegex
+    public class ReferenceRegex : Regex
     {
-        public AtGrammarRegex(string reference, Location location) : base(location)
+        public ReferenceRegex(string reference, Location location) : base(location)
         {
             Reference = reference;
         }

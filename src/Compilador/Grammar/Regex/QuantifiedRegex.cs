@@ -13,12 +13,12 @@ namespace Compilador.Grammar
         OneOrMore,
         ZeroOrOne
     }
-    public class QuantifiedGrammarRegex : GrammarRegex
+    public class QuantifiedRegex : Regex
     {
         public QuantificationType Type { get; private set; }
-        public GrammarRegex Quantified { get; private set; }
+        public Regex Quantified { get; private set; }
 
-        public QuantifiedGrammarRegex(QuantificationType type, GrammarRegex quantified, Location location) : base(location)
+        public QuantifiedRegex(QuantificationType type, Regex quantified, Location location) : base(location)
         {
             this.Type = type;
             this.Quantified = quantified;

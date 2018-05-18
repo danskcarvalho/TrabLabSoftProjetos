@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class SequentialGrammarRegex : GrammarRegex
+    public class SequentialRegex : Regex
     {
-        public IReadOnlyList<GrammarRegex> Sequences { get; private set; }
+        public IReadOnlyList<Regex> Sequences { get; private set; }
 
-        public SequentialGrammarRegex(IEnumerable<GrammarRegex> sequences, Location location) : base(location)
+        public SequentialRegex(IEnumerable<Regex> sequences, Location location) : base(location)
         {
             this.Sequences = sequences.ToList().AsReadOnly();
         }

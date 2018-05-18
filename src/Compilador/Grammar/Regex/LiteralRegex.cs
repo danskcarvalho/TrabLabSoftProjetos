@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class LiteralGrammarRegex : GrammarRegex
+    public class LiteralRegex : Regex
     {
         public string Literal { get; private set; }
         
-        public LiteralGrammarRegex(string literal, Location location) : base(location)
+        public LiteralRegex(string literal, Location location) : base(location)
         {
             this.Literal = literal;
         }

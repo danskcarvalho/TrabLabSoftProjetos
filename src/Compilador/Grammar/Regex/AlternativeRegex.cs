@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class PipeGrammarRegex : GrammarRegex
+    public class AlternativeRegex : Regex
     {
-        public IReadOnlyList<GrammarRegex> Alternatives { get; private set; }
+        public IReadOnlyList<Regex> Alternatives { get; private set; }
 
-        public PipeGrammarRegex(IEnumerable<GrammarRegex> alternatives, Location location) : base(location)
+        public AlternativeRegex(IEnumerable<Regex> alternatives, Location location) : base(location)
         {
             this.Alternatives = alternatives.ToList().AsReadOnly();
         }

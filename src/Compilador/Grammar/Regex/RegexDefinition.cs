@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
-    public class GrammarRegexDefinition
+    public class RegexDefinition
     {
         public string DefinitionName { get; set; }
-        public GrammarRegex Regex { get; set; }
+        public Regex Regex { get; set; }
         public Location Location { get; set; }
 
-        public GrammarRegexDefinition(string definitionName, GrammarRegex regex, Location location)
+        public RegexDefinition(string definitionName, Regex regex, Location location)
         {
             this.DefinitionName = definitionName;
             this.Regex = regex;
