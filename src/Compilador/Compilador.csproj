@@ -45,6 +45,20 @@
     <Compile Include="Common\GrammarException.cs" />
     <Compile Include="Common\Location.cs" />
     <Compile Include="Driving\Driver.cs" />
+    <Compile Include="Grammar\Charset\CharsetBinaryExpression.cs" />
+    <Compile Include="Grammar\Charset\CharsetDefinition.cs" />
+    <Compile Include="Grammar\Charset\CharsetExpression.cs" />
+    <Compile Include="Grammar\Charset\CharsetNameExpression.cs" />
+    <Compile Include="Grammar\GrammarDefinition.cs" />
+    <Compile Include="Grammar\Regex\AtGrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\CharsetRegexGrammar.cs" />
+    <Compile Include="Grammar\Regex\ClassGrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\GrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\GrammarRegexDefinition.cs" />
+    <Compile Include="Grammar\Regex\LiteralGrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\PipeGrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\QuantifiedGrammarRegex.cs" />
+    <Compile Include="Grammar\Regex\SequentialGrammarRegex.cs" />
     <Compile Include="Lexing\Common\BaseLexer.cs" />
     <Compile Include="Lexing\Processors\OperatorLexer.cs" />
     <Compile Include="Lexing\Processors\CommentLexer.cs" />
@@ -81,8 +95,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Lalr\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

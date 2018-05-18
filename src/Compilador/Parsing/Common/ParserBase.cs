@@ -360,6 +360,7 @@ namespace Compilador.Parsing
         }
         #endregion
 
+        #region [ Options ]
         private void ParseOption()
         {
             Scope(() =>
@@ -397,6 +398,7 @@ namespace Compilador.Parsing
                 Reduce(NodeType.OptionBody, 1);
             }
         }
+        #endregion
         #endregion
 
         #region [ Helpers ]
