@@ -51,7 +51,7 @@
     <Compile Include="Grammar\Charset\CharsetNameExpression.cs" />
     <Compile Include="Grammar\GrammarDefinition.cs" />
     <Compile Include="Grammar\Regex\ReferenceRegex.cs" />
-    <Compile Include="Grammar\Regex\CharsetGrammar.cs" />
+    <Compile Include="Grammar\Regex\CharsetRegex.cs" />
     <Compile Include="Grammar\Regex\ClassRegex.cs" />
     <Compile Include="Grammar\Regex\Regex.cs" />
     <Compile Include="Grammar\Regex\RegexDefinition.cs" />
@@ -93,6 +93,7 @@
     <Compile Include="Lalr\LalrState.cs" />
     <Compile Include="Lalr\LalrTable.cs" />
     <Compile Include="Lalr\LalrConflict.cs" />
+    <Compile Include="Grammar\Charset\CharsetClassExpression.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

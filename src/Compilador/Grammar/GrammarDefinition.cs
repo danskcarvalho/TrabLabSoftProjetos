@@ -9,11 +9,6 @@ namespace Compilador.Grammar
 {
     public class GrammarDefinition : GrammarProductionDatabase
     {
-        public GrammarDefinition(
-            IEnumerable<GrammarProduction> productions, 
-            NonterminalSymbol startingSymbol) : base(productions, startingSymbol)
-        {
-        }
 
         public GrammarDefinition(
             bool isCaseSensitive, 
@@ -22,6 +17,7 @@ namespace Compilador.Grammar
             string endBlockComment, 
             IEnumerable<RegexDefinition> regexDefinitions, 
             IEnumerable<CharsetDefinition> charsetDefinitions, 
+            IReadOnlyDictionary<GrammarProduction, string> productionNames,
             IEnumerable<GrammarProduction> productions,
             NonterminalSymbol startingSymbol) : base(productions, startingSymbol)
         {
@@ -29,6 +25,7 @@ namespace Compilador.Grammar
             LineComment = lineComment;
             StartBlockComment = startBlockComment;
             EndBlockComment = endBlockComment;
+            ProductionNames = productionNames;
             RegexDefinitions = regexDefinitions.ToList().AsReadOnly();
             CharsetDefinitions = charsetDefinitions.ToList().AsReadOnly();
         }
@@ -39,6 +36,7 @@ namespace Compilador.Grammar
         public string EndBlockComment { get; private set; }
         public IReadOnlyList<RegexDefinition> RegexDefinitions { get; private set; }
         public IReadOnlyList<CharsetDefinition> CharsetDefinitions { get; private set; }
+        public IReadOnlyDictionary<GrammarProduction, string> ProductionNames { get; private set; }
         public IReadOnlyList<string> Keywords { get; private set; }
     }
 }
