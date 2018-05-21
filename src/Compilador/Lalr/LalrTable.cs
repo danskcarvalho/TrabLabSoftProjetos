@@ -18,5 +18,10 @@ namespace Compilador.Lalr
 
         public bool HasConflicts => this.Any(x => x.HasConflicts);
         public IEnumerable<LalrConflict> Conflicts => this.SelectMany(x => x.Conflicts);
+
+        public override string ToString()
+        {
+            return $"{this.Count} states";
+        }
     }
 }

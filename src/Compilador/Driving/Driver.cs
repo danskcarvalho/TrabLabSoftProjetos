@@ -19,9 +19,9 @@ namespace Compilador.Driving
             {
                 var driver_args = GetArgs(args);
                 var source = File.ReadAllText(driver_args.Input);
-
                 var grammar = Parser.Parse(source);
                 grammar.WriteToFile(driver_args.Output);
+                Console.WriteLine("Compilação finalizada.");
             }
             catch (GrammarException e)
             {
