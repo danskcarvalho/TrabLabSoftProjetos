@@ -34,6 +34,7 @@ namespace Compilador.Parsing
             var node = new Node();
             node.Type = NodeType.Token;
             node.Token = token;
+            node.Children = new List<Node>();
             return node;
         }
         public static Node FromNodes(NodeType nodeType, IEnumerable<Node> children)

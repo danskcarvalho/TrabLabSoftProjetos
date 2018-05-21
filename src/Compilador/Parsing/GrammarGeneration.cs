@@ -38,9 +38,8 @@ namespace Compilador.Parsing
                         elements.Add(new NonterminalSymbol(item.Children[1].Token.Source));
                 }
 
-                string name = hasName ? n.Children[0].Children[1].Token.Source : null;
-                if (elements.Count != 0)
-                    visitor.Emit(Tuple.Create(name, elements, n.Location));
+                string name = hasName ? n.Children[0].Children[1].Token.Source : Guid.NewGuid().ToString();
+                visitor.Emit(Tuple.Create(name, elements, n.Location));
             });
             visitor.On(NodeType.NonterminalDefinition, n =>
             {
@@ -74,9 +73,9 @@ namespace Compilador.Parsing
             visitor.On(NodeType.RegexClassElement, n =>
             {
                 if (n.Children.Count == 1)
-                    visitor.Emit(new ClassRegexElement(GetTerminalRegex(n.Children[0])));
+                    visitor.Emit(new ClassRegexElement(GetTerminalRegexFromToken(n.Children[0])));
                 else
-                    visitor.Emit(new ClassRegexElement(GetTerminalRegex(n.Children[0]), GetTerminalRegex(n.Children[2])));
+                    visitor.Emit(new ClassRegexElement(GetTerminalRegexFromToken(n.Children[0]), GetTerminalRegexFromToken(n.Children[2])));
             });
             visitor.On(NodeType.RegexClass, n => {
                 List<ClassRegexElement> elements = new List<ClassRegexElement>();
@@ -124,7 +123,15 @@ namespace Compilador.Parsing
             {
                 List<Regex> rgs = new List<Regex>();
                 visitor.OnEmit<Regex>(r => {
-                    rgs.Add(r);
+                    if (r is AlternativeRegex)
+                    {
+                        foreach (var item in ((AlternativeRegex)r).Alternatives)
+                        {
+                            rgs.Add(item);
+                        }
+                    }
+                    else
+                        rgs.Add(r);
                 });
 
                 visitor.OnFinished(() =>
@@ -169,6 +176,31 @@ namespace Compilador.Parsing
             else if (n.Children[0].Type == NodeType.CharsetName)
             {
                 return new CharsetRegex(n.Children[0].Children[1].Token.Source, n.Location);
+            }
+            else
+                return null;
+        }
+        private static Regex GetTerminalRegexFromToken(Node n)
+        {
+            if (n.Type == NodeType.Token && n.Token.Type == Lexing.TokenType.Identifier)
+            {
+                return new LiteralRegex(n.Token.Source, n.Token.Location);
+            }
+            else if (n.Type == NodeType.Token && n.Token.Type == Lexing.TokenType.EscapeSequence)
+            {
+                return new LiteralRegex(n.Token.Value, n.Token.Location);
+            }
+            else if (n.Type == NodeType.Token && n.Token.Type == Lexing.TokenType.StringLiteral)
+            {
+                return new LiteralRegex(n.Token.Value, n.Token.Location);
+            }
+            else if (n.Type == NodeType.Token && n.Token.Type == Lexing.TokenType.AtOperator)
+            {
+                return new ReferenceRegex(n.Children[1].Token.Source, n.Token.Location);
+            }
+            else if (n.Type == NodeType.CharsetName)
+            {
+                return new CharsetRegex(n.Children[1].Token.Source, n.Location);
             }
             else
                 return null;
@@ -256,7 +288,7 @@ namespace Compilador.Parsing
                     if (options.StartSymbol == null)
                         throw new GrammarException(new Location(), "sem símbolo inicial");
                     definition = new GrammarDefinition(
-                        options.CaseSensitive,
+                        options.CaseInsensitive,
                         options.LineComment,
                         options.StartBlockComment,
                         options.EndBlockComment,
@@ -277,14 +309,14 @@ namespace Compilador.Parsing
 
             visitor.On(NodeType.OptionDefinition, (n) =>
             {
-                if (n.Children[1].Token.Source == "CaseSensitive")
+                if (n.Children[1].Token.Source == "CaseInsensitive")
                 {
                     if (n.Children[3].Children.Count != 1)
-                        throw new GrammarException(n.Children[3].Location, $"esperado yes ou no para CaseSensitive");
+                        throw new GrammarException(n.Children[3].Location, $"esperado yes ou no para CaseInsensitive");
 
-                    options.CaseSensitive = n.Children[3].Children[0].Token.Source.ToLowerInvariant() == "yes";
-                    if (!options.CaseSensitive && n.Children[3].Children[0].Token.Source.ToLowerInvariant() != "no")
-                        throw new GrammarException(n.Children[3].Location, $"esperado yes ou no para CaseSensitive");
+                    options.CaseInsensitive = n.Children[3].Children[0].Token.Source.ToLowerInvariant() == "yes";
+                    if (!options.CaseInsensitive && n.Children[3].Children[0].Token.Source.ToLowerInvariant() != "no")
+                        throw new GrammarException(n.Children[3].Location, $"esperado yes ou no para CaseInsensitive");
 
                 }
                 else if (n.Children[1].Token.Source == "StartSymbol")
@@ -330,7 +362,7 @@ namespace Compilador.Parsing
 
         private class Options
         {
-            public bool CaseSensitive { get; set; }
+            public bool CaseInsensitive { get; set; }
             public string StartSymbol { get; set; }
             public string LineComment { get; set; }
             public string StartBlockComment { get; set; }

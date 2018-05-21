@@ -15,5 +15,10 @@ namespace Compilador.Grammar
         {
             this.Alternatives = alternatives.ToList().AsReadOnly();
         }
+
+        public override string ToString()
+        {
+            return "(" + string.Join(" | ", Alternatives) + ")";
+        }
     }
 }

@@ -10,5 +10,10 @@ namespace Compilador.Grammar
         {
             this.ClassRegex = classRegex;
         }
+
+        public override string ToString()
+        {
+            return ClassRegex.ToString();
+        }
     }
 }

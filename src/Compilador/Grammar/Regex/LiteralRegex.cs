@@ -15,5 +15,10 @@ namespace Compilador.Grammar
         {
             this.Literal = literal;
         }
+
+        public override string ToString()
+        {
+            return "'" + Literal + "'";
+        }
     }
 }

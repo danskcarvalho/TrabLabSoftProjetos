@@ -15,5 +15,10 @@ namespace Compilador.Grammar
         }
 
         public string Reference { get; set; }
+
+        public override string ToString()
+        {
+            return "@" + Reference;
+        }
     }
 }

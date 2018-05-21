@@ -14,5 +14,10 @@ namespace Compilador.Grammar
         {
             this.CharsetName = charsetName;
         }
+
+        public override string ToString()
+        {
+            return "{" + CharsetName + "}";
+        }
     }
 }

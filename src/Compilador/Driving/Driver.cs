@@ -18,8 +18,7 @@ namespace Compilador.Driving
 
             try
             {
-                var node = Parser.Parse(source);
-                DisplayMessage(node.ToString());
+                var grammar = Parser.Parse(source);
             }
             catch(GrammarException e)
             {

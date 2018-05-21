@@ -19,5 +19,10 @@ namespace Compilador.Grammar
             this.Regex = regex;
             this.Location = location;
         }
+
+        public override string ToString()
+        {
+            return $"{DefinitionName} = {Regex}";
+        }
     }
 }

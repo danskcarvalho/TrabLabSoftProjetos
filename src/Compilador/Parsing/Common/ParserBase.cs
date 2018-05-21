@@ -127,7 +127,7 @@ namespace Compilador.Parsing
             if (NextIs(TokenType.AtOperator))
             {
                 Push(TokenType.AtOperator);
-                Push(TokenType.StringLiteral);
+                Push(TokenType.Identifier);
                 Reduce(NodeType.ProductionName, 2);
                 return 1;
             }

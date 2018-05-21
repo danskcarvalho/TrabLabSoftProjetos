@@ -23,5 +23,20 @@ namespace Compilador.Grammar
             this.Type = type;
             this.Quantified = quantified;
         }
+
+        public override string ToString()
+        {
+            switch (Type)
+            {
+                case QuantificationType.ZeroOrMore:
+                    return $"({Quantified})*";
+                case QuantificationType.OneOrMore:
+                    return $"({Quantified})+";
+                case QuantificationType.ZeroOrOne:
+                    return $"({Quantified})?";
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
     }
 }

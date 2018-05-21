@@ -26,7 +26,7 @@ namespace Compilador.Parsing
             {
                 for (int i = _VisitedStack.Count - 1; i >= 0; i--)
                 {
-                    var t = typeof(T);
+                    var t = obj?.GetType() ?? typeof(T);
                     while (t != null && t != typeof(object))
                     {
                         if (_VisitedStack[i].OnEmit.ContainsKey(t))
@@ -41,7 +41,7 @@ namespace Compilador.Parsing
             }
             else
             {
-                var t = typeof(T);
+                var t = obj?.GetType() ?? typeof(T);
                 while (t != null && t != typeof(object))
                 {
                     if (_OnEmit.ContainsKey(t))
@@ -64,7 +64,6 @@ namespace Compilador.Parsing
                 {
                     fn((T)obj);
                 };
-                _VisitedStack[_VisitedStack.Count - 1] = lastStackItem;
             }
             else
             {
@@ -84,63 +83,40 @@ namespace Compilador.Parsing
                 {
                     fn();
                 };
-                _VisitedStack[_VisitedStack.Count - 1] = lastStackItem;
             }
             else
                 throw new InvalidOperationException();
         }
-
-        private List<StackItem> _VisitedStack = new List<StackItem>();
+        
         public void Visit()
         {
-            List<Node> toVisit = new List<Node>() { Node };
-            
-            while(toVisit.Count != 0)
-            {
-                var lastNode = toVisit[toVisit.Count - 1];
-                
-                //remove and add children
-                toVisit.RemoveAt(toVisit.Count - 1);
-                if(_VisitedStack.Count != 0)
-                {
-                    var lastStackItem = _VisitedStack[_VisitedStack.Count - 1];
-                    lastStackItem.ChildrenVisited--;
-                    if (lastStackItem.ChildrenVisited <= 0)
-                    {
-                        lastStackItem.OnFinished?.Invoke();
-                        _VisitedStack.RemoveAt(_VisitedStack.Count - 1);
-                    }
-                    else
-                        _VisitedStack[_VisitedStack.Count - 1] = lastStackItem;
-                }
-                foreach(var item in lastNode.Children.Reverse())
-                {
-                    toVisit.Add(item);
-                }
-
-                if (lastNode.Children.Count != 0)
-                    _VisitedStack.Add(new StackItem(lastNode, lastNode.Children.Count));
-                Visit(lastNode);
-            }
+            Visit(Node);
         }
 
         private void Visit(Node node)
         {
+            _VisitedStack.Add(new StackItem());
             if (_On.ContainsKey(node.Type))
                 _On[node.Type](node);
+
+            foreach (var item in node.Children)
+            {
+                Visit(item);
+            }
+
+            var currentStackItem = _VisitedStack[_VisitedStack.Count - 1];
+            _VisitedStack.RemoveAt(_VisitedStack.Count - 1);
+            currentStackItem.OnFinished?.Invoke();
         }
 
-        private struct StackItem
+        private List<StackItem> _VisitedStack = new List<StackItem>();
+        private class StackItem
         {
-            public Node Node { get; set; }
-            public int ChildrenVisited { get; set; }
             public Dictionary<Type, Action<object>> OnEmit { get; set; }
             public Action OnFinished { get; set; }
 
-            public StackItem(Node node, int childrenVisited) : this()
+            public StackItem()
             {
-                Node = node;
-                ChildrenVisited = childrenVisited;
                 OnEmit = new Dictionary<Type, Action<object>>();
             }
         }

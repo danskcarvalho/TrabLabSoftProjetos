@@ -11,7 +11,7 @@ namespace Compilador.Grammar
     {
 
         public GrammarDefinition(
-            bool isCaseSensitive, 
+            bool isCaseInsensitive, 
             string lineComment, 
             string startBlockComment,
             string endBlockComment, 
@@ -21,7 +21,7 @@ namespace Compilador.Grammar
             IEnumerable<GrammarProduction> productions,
             NonterminalSymbol startingSymbol) : base(productions, startingSymbol)
         {
-            IsCaseSensitive = isCaseSensitive;
+            IsCaseInsensitive = isCaseInsensitive;
             LineComment = lineComment;
             StartBlockComment = startBlockComment;
             EndBlockComment = endBlockComment;
@@ -30,7 +30,7 @@ namespace Compilador.Grammar
             CharsetDefinitions = charsetDefinitions.ToList().AsReadOnly();
         }
 
-        public bool IsCaseSensitive { get; private set; }
+        public bool IsCaseInsensitive { get; private set; }
         public string LineComment { get; private set; }
         public string StartBlockComment { get; private set; }
         public string EndBlockComment { get; private set; }

@@ -25,5 +25,25 @@ namespace Compilador.Grammar
             Left = left;
             Right = right;
         }
+
+        public override string ToString()
+        {
+            return $"{Left.ToString()} {GetOperatorName()} {Right.ToString()}";
+        }
+
+        private string GetOperatorName()
+        {
+            switch (Operator)
+            {
+                case CharsetBinaryOperator.Minus:
+                    return "-";
+                case CharsetBinaryOperator.Plus:
+                    return "+";
+                case CharsetBinaryOperator.Div:
+                    return "/";
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
     }
 }

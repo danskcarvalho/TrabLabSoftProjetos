@@ -15,18 +15,7 @@ namespace Compilador
     {
         static void Main(string[] args)
         {
-            var productions = new GrammarProduction[]
-            {
-                GrammarProduction.Create("Goal", "<Sums>"),
-                GrammarProduction.Create("Sums", "<Sums> + <Products>"),
-                GrammarProduction.Create("Sums", "<Products>"),
-                GrammarProduction.Create("Products", "<Products> * <Value>"),
-                GrammarProduction.Create("Products", "<Value>"),
-                GrammarProduction.Create("Value", "Int"),
-                GrammarProduction.Create("Value", "Id")
-            };
-            GrammarProductionDatabase db = new GrammarProductionDatabase(productions, new NonterminalSymbol("Goal"));
-            var table = LalrContext.ComputeTable(db);
+            Driver.Run(args);
         }
     }
 }

@@ -15,5 +15,10 @@ namespace Compilador.Grammar
         {
             Name = name;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

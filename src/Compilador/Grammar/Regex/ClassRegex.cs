@@ -14,6 +14,11 @@ namespace Compilador.Grammar
         {
             this.Elements = elements.ToList().AsReadOnly();
         }
+
+        public override string ToString()
+        {
+            return "[" + string.Join(" ", Elements) + "]";
+        }
     }
 
     public class ClassRegexElement
@@ -29,6 +34,11 @@ namespace Compilador.Grammar
         {
             this.Start = start;
             this.End = end;
+        }
+
+        public override string ToString()
+        {
+            return End != null ? $"{Start}-{End}" : Start.ToString();
         }
     }
 }
