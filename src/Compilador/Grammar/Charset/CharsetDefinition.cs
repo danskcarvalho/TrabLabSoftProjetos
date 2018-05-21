@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class CharsetDefinition
     {
         public string Name { get; private set; }
@@ -19,5 +20,6 @@ namespace Compilador.Grammar
             Expression = expression;
             Location = location;
         }
+        private CharsetDefinition() { }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class RegexDefinition
     {
         public string DefinitionName { get; set; }
@@ -18,6 +19,10 @@ namespace Compilador.Grammar
             this.DefinitionName = definitionName;
             this.Regex = regex;
             this.Location = location;
+        }
+        private RegexDefinition()
+        {
+
         }
 
         public override string ToString()

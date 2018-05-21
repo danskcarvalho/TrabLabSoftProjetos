@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class CharsetRegex : Regex
     {
         public string CharsetName { get; private set; }
@@ -14,10 +15,16 @@ namespace Compilador.Grammar
         {
             this.CharsetName = charsetName;
         }
+        private CharsetRegex()
+        {
+
+        }
 
         public override string ToString()
         {
             return "{" + CharsetName + "}";
         }
+
+        public override IEnumerable<Regex> Children => new List<Regex>();
     }
 }

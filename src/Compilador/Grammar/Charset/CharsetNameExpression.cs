@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class CharsetNameExpression : CharsetExpression
     {
         public string Name { get; set; }
@@ -14,6 +15,10 @@ namespace Compilador.Grammar
         public CharsetNameExpression(string name, Location location) : base(location)
         {
             Name = name;
+        }
+        private CharsetNameExpression()
+        {
+
         }
 
         public override string ToString()

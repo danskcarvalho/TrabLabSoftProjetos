@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class AlternativeRegex : Regex
     {
         public IReadOnlyList<Regex> Alternatives { get; private set; }
@@ -15,10 +16,16 @@ namespace Compilador.Grammar
         {
             this.Alternatives = alternatives.ToList().AsReadOnly();
         }
+        private AlternativeRegex()
+        {
+
+        }
 
         public override string ToString()
         {
             return "(" + string.Join(" | ", Alternatives) + ")";
         }
+
+        public override IEnumerable<Regex> Children => Alternatives;
     }
 }

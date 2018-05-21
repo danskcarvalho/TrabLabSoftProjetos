@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class NonterminalSymbol : Symbol, IEquatable<NonterminalSymbol>, IComparable<NonterminalSymbol>
     {
         public static readonly NonterminalSymbol StartingSymbol = new NonterminalSymbol("26574734-170f-4e59-bb1e-121745370006@StartingSymbol");
@@ -9,6 +10,10 @@ namespace Compilador.Lalr
         public NonterminalSymbol(string name)
         {
             this.Name = name;
+        }
+        private NonterminalSymbol()
+        {
+
         }
 
         public bool Equals(NonterminalSymbol other)

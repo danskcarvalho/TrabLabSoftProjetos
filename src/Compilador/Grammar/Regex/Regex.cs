@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public abstract class Regex
     {
         public Location Location { get; private set; }
@@ -15,5 +16,11 @@ namespace Compilador.Grammar
         {
             this.Location = location;
         }
+        protected Regex()
+        {
+
+        }
+
+        public abstract IEnumerable<Regex> Children { get; }
     }
 }

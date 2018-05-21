@@ -4,12 +4,14 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class GrammarProductionDatabase : IEquatable<GrammarProductionDatabase>
     {
         public IReadOnlyList<NonterminalSymbol> Nonterminals { get; private set; }
         public IReadOnlyList<GrammarProduction> Productions { get; private set; }
         public NonterminalSymbol StartingSymbol { get; private set; }
 
+        protected GrammarProductionDatabase() { }
         public GrammarProductionDatabase(IEnumerable<GrammarProduction> productions,
                                          NonterminalSymbol startingSymbol)
         {

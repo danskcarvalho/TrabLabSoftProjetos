@@ -5,10 +5,15 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class LalrTable : ReadOnlyCollection<LalrState>
     {
         public LalrTable(IList<LalrState> list) : base(list)
         {
+        }
+        private LalrTable() : base(new List<LalrState>())
+        {
+
         }
 
         public bool HasConflicts => this.Any(x => x.HasConflicts);

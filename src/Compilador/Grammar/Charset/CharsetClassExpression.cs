@@ -3,6 +3,7 @@ using Compilador.Common;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public class CharsetClassExpression : CharsetExpression
     {
         public ClassRegex ClassRegex { get; private set; } 
@@ -10,6 +11,7 @@ namespace Compilador.Grammar
         {
             this.ClassRegex = classRegex;
         }
+        private CharsetClassExpression() { }
 
         public override string ToString()
         {

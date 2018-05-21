@@ -5,10 +5,15 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class LalrState : ReadOnlyDictionary<Symbol, ReadOnlyCollection<LalrAction>>
     {
         public LalrState(IDictionary<Symbol, ReadOnlyCollection<LalrAction>> dictionary) : base(dictionary)
         {
+        }
+        public LalrState() : base(new Dictionary<Symbol, ReadOnlyCollection<LalrAction>>())
+        {
+
         }
 
         public bool HasConflicts => this.Any(x => x.Value.Count > 1);
@@ -16,10 +21,12 @@ namespace Compilador.Lalr
                                                                                                 new LalrConflict(LalrConflictType.ShiftReduce, y.Key, this) :
                                                                                                 new LalrConflict(LalrConflictType.ReduceReduce, y.Key, this));
     }
-
+    [Serializable]
     public abstract class LalrAction {
+        protected LalrAction() { }
     }
 
+    [Serializable]
     public class LalrShift : LalrAction {
         private int StateIndex { get; set; }
         private LalrTable Table { get; set; }
@@ -27,6 +34,10 @@ namespace Compilador.Lalr
         public LalrShift(int stateIndex, LalrTable table){
             this.StateIndex = stateIndex;
             this.Table = table;
+        }
+        private LalrShift()
+        {
+
         }
 
         public LalrState State => Table[StateIndex];
@@ -36,12 +47,16 @@ namespace Compilador.Lalr
             return $"Shift {StateIndex}";
         }
     }
-
+    [Serializable]
     public class LalrReduce : LalrAction {
         public GrammarProduction Production { get; private set; }
 
         public LalrReduce(GrammarProduction production){
             this.Production = production;
+        }
+        private LalrReduce()
+        {
+
         }
 
         public override string ToString()
@@ -49,14 +64,19 @@ namespace Compilador.Lalr
             return $"Reduce {Production.ToString()}";
         }
     }
-
+    [Serializable]
     public class LalrAccept : LalrAction {
+        public LalrAccept() { }
     }
-
+    [Serializable]
     public class LalrGoto : LalrAction {
         private int StateIndex { get; set; }
         private LalrTable Table { get; set; }
 
+        private LalrGoto()
+        {
+
+        }
         public LalrGoto(int stateIndex, LalrTable table)
         {
             this.StateIndex = stateIndex;

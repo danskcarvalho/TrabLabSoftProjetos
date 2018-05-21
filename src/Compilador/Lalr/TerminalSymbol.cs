@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class TerminalSymbol : Symbol, IEquatable<TerminalSymbol>, IComparable<TerminalSymbol>
     {
         public static readonly TerminalSymbol Eof = new TerminalSymbol("55d73a30-a1f9-4323-8a80-5f18efd9c840@Eof");
@@ -11,6 +12,10 @@ namespace Compilador.Lalr
 
         public TerminalSymbol(string name) {
             this.Name = name;
+        }
+        private TerminalSymbol()
+        {
+
         }
 
         public bool Equals(TerminalSymbol other)

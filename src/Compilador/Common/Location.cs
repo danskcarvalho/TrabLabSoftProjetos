@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Common
 {
+    [Serializable]
     public struct Location
     {
         public int Line { get; private set; }

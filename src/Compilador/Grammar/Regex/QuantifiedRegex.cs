@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public enum QuantificationType
     {
         ZeroOrMore,
         OneOrMore,
         ZeroOrOne
     }
+    [Serializable]
     public class QuantifiedRegex : Regex
     {
         public QuantificationType Type { get; private set; }
@@ -23,6 +25,12 @@ namespace Compilador.Grammar
             this.Type = type;
             this.Quantified = quantified;
         }
+        private QuantifiedRegex()
+        {
+
+        }
+
+        public override IEnumerable<Regex> Children => new List<Regex> { Quantified };
 
         public override string ToString()
         {

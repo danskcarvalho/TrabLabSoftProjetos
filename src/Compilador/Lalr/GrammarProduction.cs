@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class GrammarProduction : IEquatable<GrammarProduction>, IComparable<GrammarProduction>, IComparable
     {
         public NonterminalSymbol Head { get; private set; }
         public SymbolString Body { get; private set; }
 
+        private GrammarProduction()
+        {
+
+        }
         public GrammarProduction(NonterminalSymbol head, SymbolString body){
             this.Head = head;
             this.Body = body;

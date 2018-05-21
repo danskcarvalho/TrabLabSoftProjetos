@@ -7,18 +7,21 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public enum CharsetBinaryOperator
     {
         Minus,
         Plus,
         Div
     }
+    [Serializable]
     public class CharsetBinaryExpression : CharsetExpression
     {
         public CharsetBinaryOperator Operator { get; private set; }
         public CharsetExpression Left { get; private set; }
         public CharsetExpression Right { get; private set; }
-
+        
+        private CharsetBinaryExpression() { }
         public CharsetBinaryExpression(CharsetBinaryOperator @operator, CharsetExpression left, CharsetExpression right, Location location) : base(location)
         {
             Operator = @operator;
@@ -28,7 +31,7 @@ namespace Compilador.Grammar
 
         public override string ToString()
         {
-            return $"{Left.ToString()} {GetOperatorName()} {Right.ToString()}";
+            return $"{{{Left.ToString()} {GetOperatorName()} {Right.ToString()}}}";
         }
 
         private string GetOperatorName()

@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Compilador.Driving
 {
@@ -13,14 +15,15 @@ namespace Compilador.Driving
     {
         public static void Run(string[] args)
         {
-            var driver_args = GetArgs(args);
-            var source = System.IO.File.ReadAllText(driver_args.Input);
-
             try
             {
+                var driver_args = GetArgs(args);
+                var source = File.ReadAllText(driver_args.Input);
+
                 var grammar = Parser.Parse(source);
+                grammar.WriteToFile(driver_args.Output);
             }
-            catch(GrammarException e)
+            catch (GrammarException e)
             {
                 DisplayError(e.Message);
             }
@@ -31,12 +34,6 @@ namespace Compilador.Driving
 #if DEBUG
             Console.ReadKey(true);
 #endif
-        }
-
-        private static void DisplayMessage(string message)
-        {
-            Console.WriteLine(message);
-            Debug.WriteLine(message);
         }
 
         private static void DisplayError(string message)
@@ -57,7 +54,7 @@ namespace Compilador.Driving
             return new DriverArguments()
             {
                 Input = args[0],
-                Output = null //TODO: Mudar depois
+                Output = args.Length >= 2 ? args[1] : "BNFOutput"
             };
         }
 

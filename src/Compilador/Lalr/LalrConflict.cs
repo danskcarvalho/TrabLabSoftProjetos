@@ -2,12 +2,18 @@
 using System.Linq;
 namespace Compilador.Lalr
 {
+    [Serializable]
     public enum LalrConflictType {
         ShiftReduce,
         ReduceReduce
     }
+    [Serializable]
     public class LalrConflict
     {
+        private LalrConflict()
+        {
+
+        }
         public LalrConflictType Type { get; private set; }
         public Symbol Symbol { get; private set; }
         public LalrState State { get; private set; }

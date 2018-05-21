@@ -6,10 +6,15 @@ using Compilador.Common;
 
 namespace Compilador.Lalr
 {
+    [Serializable]
     public class SymbolString : ReadOnlyCollection<Symbol>, IEquatable<SymbolString>, IComparable<SymbolString>, IComparable
     {
         public SymbolString(IEnumerable<Symbol> symbols) : base(symbols.ToList())
         {
+        }
+        private SymbolString() : base(new List<Symbol>())
+        {
+
         }
 
         public int CompareTo(SymbolString other)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Grammar
 {
+    [Serializable]
     public abstract class CharsetExpression
     {
         public Location Location { get; private set; }
@@ -15,5 +16,6 @@ namespace Compilador.Grammar
         {
             this.Location = location;
         }
+        protected CharsetExpression() { }
     }
 }
