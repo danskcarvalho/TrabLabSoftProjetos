@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Lexing
 {
-    public class Token
+    class Token
     {
         public TokenType Type { get; private set; }
         public string Value { get; private set; }

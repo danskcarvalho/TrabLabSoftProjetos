@@ -7,7 +7,7 @@ using Compilador.Common;
 
 namespace Compilador.Lexing
 {
-    public class EofLexer : BaseLexer
+    class EofLexer : BaseLexer
     {
         public EofLexer(LineColumnMapping mapping, string source) : base(mapping, source)
         {

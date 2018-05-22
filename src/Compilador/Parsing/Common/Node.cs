@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Parsing
 {
-    public class Node
+    class Node
     {
         public NodeType Type { get; private set; }
         public Location Location

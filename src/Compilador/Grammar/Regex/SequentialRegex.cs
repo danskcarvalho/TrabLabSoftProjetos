@@ -26,5 +26,21 @@ namespace Compilador.Grammar
         {
             return "(" + string.Join(" ", Sequences) + ")";
         }
+
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            var original = offset;
+
+            foreach (var item in Sequences)
+            {
+                if(!item.Lex(grammar, source, ref offset))
+                {
+                    offset = original;
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

@@ -22,5 +22,7 @@ namespace Compilador.Grammar
         }
 
         public abstract IEnumerable<Regex> Children { get; }
+
+        public abstract bool Lex(GrammarDefinition grammar, string source, ref int offset);
     }
 }

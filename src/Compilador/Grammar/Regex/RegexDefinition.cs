@@ -10,13 +10,13 @@ namespace Compilador.Grammar
     [Serializable]
     public class RegexDefinition
     {
-        public string DefinitionName { get; set; }
+        public string Name { get; set; }
         public Regex Regex { get; set; }
         public Location Location { get; set; }
 
         public RegexDefinition(string definitionName, Regex regex, Location location)
         {
-            this.DefinitionName = definitionName;
+            this.Name = definitionName;
             this.Regex = regex;
             this.Location = location;
         }
@@ -27,7 +27,7 @@ namespace Compilador.Grammar
 
         public override string ToString()
         {
-            return $"{DefinitionName} = {Regex}";
+            return $"{Name} = {Regex}";
         }
     }
 }

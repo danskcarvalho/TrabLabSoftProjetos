@@ -9,7 +9,7 @@ using Compilador.Lalr;
 
 namespace Compilador.Parsing
 {
-    public static class GrammarGeneration
+    static class GrammarGeneration
     {
         public static GrammarDefinition Build(Node node)
         {
@@ -73,9 +73,9 @@ namespace Compilador.Parsing
             visitor.On(NodeType.RegexClassElement, n =>
             {
                 if (n.Children.Count == 1)
-                    visitor.Emit(new ClassRegexElement(GetTerminalRegexFromToken(n.Children[0])));
+                    visitor.Emit(new ClassRegexElement((LiteralRegex)GetTerminalRegexFromToken(n.Children[0])));
                 else
-                    visitor.Emit(new ClassRegexElement(GetTerminalRegexFromToken(n.Children[0]), GetTerminalRegexFromToken(n.Children[2])));
+                    visitor.Emit(new ClassRegexElement((LiteralRegex)GetTerminalRegexFromToken(n.Children[0]), (LiteralRegex)GetTerminalRegexFromToken(n.Children[2])));
             });
             visitor.On(NodeType.RegexClass, n => {
                 List<ClassRegexElement> elements = new List<ClassRegexElement>();

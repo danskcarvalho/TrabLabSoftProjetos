@@ -6,7 +6,7 @@ using Compilador.Common;
 
 namespace Compilador.Lalr
 {
-    public class LalrItemSet : ReadOnlyCollection<LalrItem>, IEquatable<LalrItemSet>
+    class LalrItemSet : ReadOnlyCollection<LalrItem>, IEquatable<LalrItemSet>
     {
         public LalrItemSet(IEnumerable<LalrItem> items) : base(new HashSet<LalrItem>(items).OrderBy(i => i).ToList())
         {

@@ -22,7 +22,30 @@ namespace Compilador.Grammar
         {
 
         }
-        
+
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            for (int i = 0; i < Literal.Length; i++)
+            {
+                if (i >= source.Length)
+                    return false;
+
+                if (grammar.IsCaseInsensitive)
+                {
+                    if (char.ToLowerInvariant(source[i]) != char.ToLowerInvariant(Literal[i]) && 
+                        char.ToUpperInvariant(source[i]) != char.ToUpperInvariant(Literal[i]))
+                        return false;
+                }
+                else
+                {
+                    if (source[i] != Literal[i])
+                        return false;
+                }
+            }
+
+            offset += Literal.Length;
+            return true;
+        }
 
         public override string ToString()
         {

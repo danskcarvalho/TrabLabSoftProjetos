@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Parsing
 {
-    public enum NodeType
+    enum NodeType
     {
         Token,
         GrammarDefinition,

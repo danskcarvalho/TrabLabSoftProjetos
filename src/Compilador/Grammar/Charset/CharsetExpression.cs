@@ -17,5 +17,7 @@ namespace Compilador.Grammar
             this.Location = location;
         }
         protected CharsetExpression() { }
+
+        public abstract bool Contains(GrammarDefinition grammar, char c);
     }
 }

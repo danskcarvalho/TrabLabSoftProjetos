@@ -48,5 +48,20 @@ namespace Compilador.Grammar
                     throw new InvalidOperationException();
             }
         }
+
+        public override bool Contains(GrammarDefinition grammar, char c)
+        {
+            switch (Operator)
+            {
+                case CharsetBinaryOperator.Minus:
+                    return Left.Contains(grammar, c) && !Right.Contains(grammar, c);
+                case CharsetBinaryOperator.Plus:
+                    return Left.Contains(grammar, c) || Right.Contains(grammar, c);
+                case CharsetBinaryOperator.Div:
+                    return Left.Contains(grammar, c) && Right.Contains(grammar, c);
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
     }
 }

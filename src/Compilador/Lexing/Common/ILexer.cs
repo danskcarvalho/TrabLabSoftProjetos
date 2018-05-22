@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Lexing
 {
-    public interface ILexer
+    interface ILexer
     {
         Token TryLex(ref int offset);
     }

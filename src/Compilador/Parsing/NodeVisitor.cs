@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Parsing
 {
-    public class NodeVisitor
+    class NodeVisitor
     {
         public Node Node { get; private set; }
 

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
-    public class LalrContext
+    class LalrContext
     {
         public static LalrTable ComputeTable(GrammarProductionDatabase db){
             var ctx = new LalrContext(db);

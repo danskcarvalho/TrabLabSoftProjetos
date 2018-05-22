@@ -7,7 +7,7 @@ using Compilador.Common;
 
 namespace Compilador.Lexing
 {
-    public class EscapeSequenceLexer : BaseLexer
+    class EscapeSequenceLexer : BaseLexer
     {
         public EscapeSequenceLexer(LineColumnMapping mapping, string source) : base(mapping, source)
         {

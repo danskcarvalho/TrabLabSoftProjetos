@@ -27,5 +27,10 @@ namespace Compilador.Grammar
         {
             return "@" + Reference;
         }
+
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            return grammar.RegexByName[Reference].Regex.Lex(grammar, source, ref offset);
+        }
     }
 }

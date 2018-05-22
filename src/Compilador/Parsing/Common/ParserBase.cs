@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Parsing
 {
-    public class ParserBase
+    class ParserBase
     {
         private IReadOnlyList<Token> Tokens;
         private int CurrentToken = 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Lexing
 {
-    public enum TokenType
+    enum TokenType
     {
         OptionKeyword,
         Whitespace,

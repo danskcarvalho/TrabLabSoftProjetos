@@ -7,7 +7,7 @@ using Compilador.Common;
 
 namespace Compilador.Lexing
 {
-    public class StringLiteralLexer : BaseLexer
+    class StringLiteralLexer : BaseLexer
     {
         public StringLiteralLexer(LineColumnMapping mapping, string source) : base(mapping, source)
         {

@@ -26,5 +26,17 @@ namespace Compilador.Grammar
         }
 
         public override IEnumerable<Regex> Children => new List<Regex>();
+
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            var cs = grammar.CharsetByName[CharsetName];
+            if (cs.Expression.Contains(grammar, source[offset]))
+            {
+                offset++;
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Lexing
 {
-    public static class Tokenizer
+    static class Tokenizer
     {
         public static Token[] Lex(string source)
         {

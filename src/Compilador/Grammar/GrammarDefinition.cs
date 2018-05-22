@@ -38,6 +38,20 @@ namespace Compilador.Grammar
             ExtractKeywords();
             Validate();
             ComputeTable();
+
+            var charsetByName = new Dictionary<string, CharsetDefinition>();
+            this.CharsetByName = charsetByName;
+            foreach (var item in CharsetDefinitions)
+            {
+                charsetByName[item.Name] = item;
+            }
+
+            var regexByName = new Dictionary<string, RegexDefinition>();
+            this.RegexByName = regexByName;
+            foreach (var item in RegexDefinitions)
+            {
+                regexByName[item.Name] = item;
+            }
         }
 
         public void WriteToFile(string path)
@@ -70,7 +84,7 @@ namespace Compilador.Grammar
         private void ExtractKeywords()
         {
             Keywords = new HashSet<string>(this.Productions.SelectMany(x => x.Body.Where(y => y is TerminalSymbol).Cast<TerminalSymbol>()
-                        .Where(y => !RegexDefinitions.Any(z => z.DefinitionName == y.Name))).Select(x => x.Name)).ToList().AsReadOnly();
+                        .Where(y => !RegexDefinitions.Any(z => z.Name == y.Name))).Select(x => x.Name)).ToList().AsReadOnly();
         }
 
         public bool IsCaseInsensitive { get; private set; }
@@ -82,12 +96,15 @@ namespace Compilador.Grammar
         public IReadOnlyDictionary<GrammarProduction, string> ProductionNames { get; private set; }
         public IReadOnlyList<string> Keywords { get; private set; }
         public LalrTable Table { get; private set; }
+        public IReadOnlyDictionary<string, CharsetDefinition> CharsetByName { get; private set; }
+        public IReadOnlyDictionary<string, RegexDefinition> RegexByName { get; private set; }
 
         private void Validate()
         {
             ValidateOptions();
             ValidateNoReservedCharsetName();
             ValidateNoUndeclaredCharsets();
+            ValidateNoRecursionCharset();
             ValidateNoUndeclaredNonterminal();
             ValidateNoRecursionTerminal();
             ValidateNoInfRecursion();
@@ -99,6 +116,7 @@ namespace Compilador.Grammar
             foreach (var def in RegexDefinitions)
             {
                 stack.Clear();
+                stack.Add(def.Name);
                 ValidateNoRecursionTerminal(def.Regex, stack);
             }
         }
@@ -110,11 +128,11 @@ namespace Compilador.Grammar
                 var rr = r as ReferenceRegex;
                 if (stack.Contains(rr.Reference))
                     throw new GrammarException(r.Location, $"recursão infinita para o símbolo terminal {rr.Reference}");
-                if (!RegexDefinitions.Any(x => x.DefinitionName == rr.Reference))
+                if (!RegexDefinitions.Any(x => x.Name == rr.Reference))
                     throw new GrammarException(r.Location, $"terminal não declarado {rr.Reference}");
 
                 stack.Add(rr.Reference);
-                ValidateNoRecursionTerminal(RegexDefinitions.First(x => x.DefinitionName == rr.Reference).Regex, stack);
+                ValidateNoRecursionTerminal(RegexDefinitions.First(x => x.Name == rr.Reference).Regex, stack);
             }
             else if(r is CharsetRegex)
             {
@@ -128,6 +146,36 @@ namespace Compilador.Grammar
                 {
                     ValidateNoRecursionTerminal(item, stack);
                 }
+            }
+        }
+
+        private void ValidateNoRecursionCharset()
+        {
+            HashSet<string> stack = new HashSet<string>();
+            foreach (var def in CharsetDefinitions)
+            {
+                stack.Clear();
+                stack.Add(def.Name);
+                ValidateNoRecursionCharset(def.Expression, stack);
+            }
+        }
+
+        private void ValidateNoRecursionCharset(CharsetExpression r, HashSet<string> stack)
+        {
+            if (r is CharsetNameExpression)
+            {
+                var rr = r as CharsetNameExpression;
+                if (stack.Contains(rr.Name))
+                    throw new GrammarException(r.Location, $"recursão infinita para {{{rr.Name}}}");
+
+                stack.Add(rr.Name);
+                ValidateNoRecursionCharset(CharsetDefinitions.First(x => x.Name == rr.Name).Expression, stack);
+            }
+            else if (r is CharsetBinaryExpression)
+            {
+                var b = r as CharsetBinaryExpression;
+                ValidateNoRecursionCharset(b.Left, stack);
+                ValidateNoRecursionCharset(b.Right, stack);
             }
         }
 
@@ -197,7 +245,8 @@ namespace Compilador.Grammar
         private bool IsReservedCharsetName(string name)
         {
             return name == "Digit" || name == "Letter" || name == "LetterOrDigit" || name == "Number" ||
-                name == "Punctuation" || name == "Separator" || name == "Symbol" || name == "Upper" || name == "Whitespace";
+                name == "Punctuation" || name == "Separator" || name == "Symbol" || name == "Upper" || name == "Whitespace" ||
+                name == "Lower" || name == "Any" || name == "None";
         }
 
         private void ValidateNoUndeclaredCharsets()

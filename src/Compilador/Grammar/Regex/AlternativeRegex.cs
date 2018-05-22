@@ -27,5 +27,17 @@ namespace Compilador.Grammar
         }
 
         public override IEnumerable<Regex> Children => Alternatives;
+
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            var original = offset;
+            foreach (var alt in Alternatives)
+            {
+                alt.Lex(grammar, source, ref offset);
+                if (offset != original)
+                    return true;
+            }
+            return false;
+        }
     }
 }

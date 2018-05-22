@@ -7,7 +7,7 @@ using Compilador.Common;
 
 namespace Compilador.Lexing
 {
-    public class WhitespaceLexer : BaseLexer
+    class WhitespaceLexer : BaseLexer
     {
         public WhitespaceLexer(LineColumnMapping mapping, string source) : base(mapping, source)
         {

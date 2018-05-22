@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Compilador.Common
 {
-    public static class Memoize
+    static class Memoize
     {
         private static Dictionary<MemoizationInput, object> mMemoized = new Dictionary<MemoizationInput, object>();
         public static TOutput Function<TInput, TOutput>(FunctionName fn, TInput input, Func<TInput, TOutput> body)

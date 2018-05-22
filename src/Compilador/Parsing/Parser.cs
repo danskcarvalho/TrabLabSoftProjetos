@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Parsing
 {
-    public static class Parser
+    static class Parser
     {
         private static Node InternalParse(string source)
         {

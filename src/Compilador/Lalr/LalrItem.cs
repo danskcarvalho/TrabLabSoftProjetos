@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Compilador.Lalr
 {
-    public class LalrItem : IEquatable<LalrItem>, IComparable<LalrItem>, IComparable
+    class LalrItem : IEquatable<LalrItem>, IComparable<LalrItem>, IComparable
     {
         public GrammarProduction Production { get; private set; }
         public int ParsingPoint { get; private set; }

@@ -17,5 +17,10 @@ namespace Compilador.Grammar
         {
             return ClassRegex.ToString();
         }
+
+        public override bool Contains(GrammarDefinition grammar, char c)
+        {
+            return ClassRegex.Contains(grammar, c);
+        }
     }
 }

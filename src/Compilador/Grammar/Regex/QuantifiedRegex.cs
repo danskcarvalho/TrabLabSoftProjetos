@@ -32,6 +32,26 @@ namespace Compilador.Grammar
 
         public override IEnumerable<Regex> Children => new List<Regex> { Quantified };
 
+        public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
+        {
+            switch (Type)
+            {
+                case QuantificationType.ZeroOrMore:
+                    while (Quantified.Lex(grammar, source, ref offset)) ;
+                    return true;
+                case QuantificationType.OneOrMore:
+                    if (!Quantified.Lex(grammar, source, ref offset))
+                        return false;
+                    while (Quantified.Lex(grammar, source, ref offset)) ;
+                    return true;
+                case QuantificationType.ZeroOrOne:
+                    Quantified.Lex(grammar, source, ref offset);
+                    return true;
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
         public override string ToString()
         {
             switch (Type)

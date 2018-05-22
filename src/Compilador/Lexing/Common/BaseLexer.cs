@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Compilador.Lexing
 {
-    public abstract class BaseLexer : ILexer
+    abstract class BaseLexer : ILexer
     {
         private LineColumnMapping _Mapping;
         private string _Source;
