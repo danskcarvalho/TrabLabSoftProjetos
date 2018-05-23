@@ -27,18 +27,18 @@ namespace Compilador.Grammar
         {
             for (int i = 0; i < Literal.Length; i++)
             {
-                if (i >= source.Length)
+                if ((offset + i) >= source.Length)
                     return false;
 
                 if (grammar.IsCaseInsensitive)
                 {
-                    if (char.ToLowerInvariant(source[i]) != char.ToLowerInvariant(Literal[i]) && 
-                        char.ToUpperInvariant(source[i]) != char.ToUpperInvariant(Literal[i]))
+                    if (char.ToLowerInvariant(source[offset + i]) != char.ToLowerInvariant(Literal[i]) && 
+                        char.ToUpperInvariant(source[offset + i]) != char.ToUpperInvariant(Literal[i]))
                         return false;
                 }
                 else
                 {
-                    if (source[i] != Literal[i])
+                    if (source[offset + i] != Literal[i])
                         return false;
                 }
             }

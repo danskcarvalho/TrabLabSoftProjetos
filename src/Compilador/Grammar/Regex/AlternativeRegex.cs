@@ -30,11 +30,9 @@ namespace Compilador.Grammar
 
         public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
         {
-            var original = offset;
             foreach (var alt in Alternatives)
             {
-                alt.Lex(grammar, source, ref offset);
-                if (offset != original)
+                if (alt.Lex(grammar, source, ref offset))
                     return true;
             }
             return false;

@@ -40,7 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lexing\ILexer.cs" />
+    <Compile Include="Lexing\Lexer.cs" />
+    <Compile Include="Lexing\Token.cs" />
+    <Compile Include="Parsing\LalrParser.cs" />
+    <Compile Include="Parsing\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Compilador\Compilador.csproj">
+      <Project>{9adb32da-55bb-4921-a2dc-9d4d50577504}</Project>
+      <Name>Compilador</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
