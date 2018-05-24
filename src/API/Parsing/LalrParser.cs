@@ -5,6 +5,7 @@ using Compilador.Lalr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,7 +37,7 @@ namespace API.Parsing
                     else if (action is LalrReduce)
                     {
                         var prod = ((LalrReduce)action).Production;
-                        Reduce(prod, lalrState);
+                        Reduce(grammar, prod, lalrState);
                         currentState = lalrState.StateStack[lalrState.StateStack.Count - 1];
                         lalrState.StateStack.Add(((LalrGoto)currentState[prod.Head].First()).State);
                         goto DontConsumeToken;
@@ -44,6 +45,7 @@ namespace API.Parsing
                     else
                     {
                         //accept
+                        SetParent(lalrState.NodeStack.First(), null);
                         return lalrState.NodeStack.First();
                     }
                 }
@@ -53,7 +55,26 @@ namespace API.Parsing
             throw new InvalidOperationException();
         }
 
-        private static void Reduce(GrammarProduction production, FullLalrState lalrState)
+        private static void SetParent(Node node, Node parent)
+        {
+            SetParentProperty(node, parent);
+            if(node is ReducedNode)
+            {
+                var rNode = (ReducedNode)node;
+                foreach (var item in rNode.Children)
+                {
+                    SetParent(item, node);
+                }
+            }
+        }
+
+        private static PropertyInfo _Property = typeof(Node).GetProperty("Parent");
+        private static void SetParentProperty(Node node, Node parent)
+        {
+            _Property.SetValue(node, parent);
+        }
+
+        private static void Reduce(GrammarDefinition definition, GrammarProduction production, FullLalrState lalrState)
         {
             List<Node> toBeReduced = new List<Node>();
             for (int i = 0; i < production.Body.Count; i++)
@@ -64,7 +85,7 @@ namespace API.Parsing
             }
 
             toBeReduced.Reverse();
-            lalrState.NodeStack.Add(Node.FromNodes(production, toBeReduced));
+            lalrState.NodeStack.Add(Node.FromNodes(definition.ProductionNames[production], production, toBeReduced));
         }
 
         private class FullLalrState

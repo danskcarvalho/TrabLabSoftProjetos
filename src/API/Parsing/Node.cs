@@ -12,6 +12,10 @@ namespace API.Parsing
     public abstract class Node
     {
         public Location Location { get; private set; }
+        public abstract string Name { get; }
+        public Node Parent { get; private set; }
+        public abstract Token Token { get; }
+        public abstract IReadOnlyList<Node> Children { get; }
 
         public Node(Location location)
         {
@@ -22,19 +26,23 @@ namespace API.Parsing
         {
             return new TokenNode(token);
         }
-        public static Node FromNodes(GrammarProduction production, IEnumerable<Node> children)
+        public static Node FromNodes(string name, GrammarProduction production, IEnumerable<Node> children)
         {
-            return new ReducedNode(production, children);
+            return new ReducedNode(name, production, children);
         }
     }
 
     public class TokenNode : Node
     {
-        public Token Token { get; private set; }
+        private static IReadOnlyList<Node> EmptyChildren = new List<Node>().AsReadOnly();
+        private readonly Token _token;
+        public override Token Token { get => _token; }
+        public override IReadOnlyList<Node> Children => EmptyChildren;
+        public override string Name => Token.Name;
 
         public TokenNode(Token token) : base(token.Location)
         {
-            Token = token;
+            _token = token;
         }
 
         public override string ToString()
@@ -46,14 +54,20 @@ namespace API.Parsing
     public class ReducedNode : Node
     {
         public GrammarProduction Production { get; private set; }
-        public IReadOnlyList<Node> Children { get; private set; }
+        public override IReadOnlyList<Node> Children { get => _children; }
+        public override Token Token => null;
+        private string _Name;
+        private IReadOnlyList<Node> _children;
 
-        public ReducedNode(GrammarProduction production, IEnumerable<Node> children) : base(children.First().Location)
+        public override string Name => _Name;
+
+        public ReducedNode(string name, GrammarProduction production, IEnumerable<Node> children) : base(children.First().Location)
         {
+            this._Name = name;
             Production = production;
-            Children = children.ToList().AsReadOnly();
+            _children = children.ToList().AsReadOnly();
         }
-        
+
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();

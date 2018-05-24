@@ -46,6 +46,11 @@
     <Compile Include="Parsing\LalrParser.cs" />
     <Compile Include="Parsing\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semantics\AttributeValue.cs" />
+    <Compile Include="Semantics\IGrammarAttribute.cs" />
+    <Compile Include="Semantics\InheritedAttribute.cs" />
+    <Compile Include="Semantics\Interpreter.cs" />
+    <Compile Include="Semantics\SynthesizedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compilador\Compilador.csproj">
