@@ -122,7 +122,8 @@ namespace Compilador.Lalr
         private Dictionary<Symbol, LalrItemSet> InternalGoto(GrammarProductionDatabase db){
             HashSet<Symbol> symbols = new HashSet<Symbol>();
 
-            var closure = this.Closure(db);
+            //var closure = this.Closure(db);
+            var closure = this;
             foreach (var item in closure)
             {
                 if (item.AtEnd)
@@ -134,7 +135,7 @@ namespace Compilador.Lalr
             Dictionary<Symbol, LalrItemSet> itemSets = new Dictionary<Symbol, LalrItemSet>();
             foreach (var symb in symbols)
             {
-                itemSets[symb] = closure.Goto(symb);
+                itemSets[symb] = closure.Goto(symb).Closure(db);
             }
             return itemSets;
         }

@@ -33,10 +33,13 @@ namespace Compilador.Lalr
             mNextItems = new HashSet<LalrItemSet>();
             mRecordedGotos = new Dictionary<Tuple<int, Symbol>, int>();
 
-            mStates.Add(new LalrItemSet(new LalrItem[] {
+            var initialState = new LalrItemSet(new LalrItem[] {
                 new LalrItem(mDatabase[NonterminalSymbol.StartingSymbol].First(), 0, TerminalSymbol.Eof)
-            }));
-            mItemsByIndex.Add(mStates[0].ToCoreSet(), 0);
+            });
+            //mStates.Add(initialState);
+            mStates.Add(initialState.Closure(mDatabase));
+            //mItemsByIndex.Add(mStates[0].ToCoreSet(), 0);
+            mItemsByIndex.Add(mStates[0], 0);
             mCurrentItems.Add(mStates[0]);
 
             while (mCurrentItems.Count != 0)
@@ -112,20 +115,24 @@ namespace Compilador.Lalr
 
         private void Expand(LalrItemSet iset)
         {
-            var thisIndex = mItemsByIndex[iset.ToCoreSet()];
+            //var thisIndex = mItemsByIndex[iset.ToCoreSet()];
+            var thisIndex = mItemsByIndex[iset];
 
             var performGoto = iset.Goto(mDatabase);
             foreach (var item in performGoto)
             {
-                var cs = item.Value.ToCoreSet();
-                if(mItemsByIndex.ContainsKey(cs)){
-                    var index = mItemsByIndex[cs];
-                    mStates[index] = LalrItemSet.Merge(mStates[index], item.Value);
+                //var cs = item.Value.ToCoreSet();
+                //if(mItemsByIndex.ContainsKey(cs)){
+                if (mItemsByIndex.ContainsKey(item.Value)) {
+                    //var index = mItemsByIndex[cs];
+                    var index = mItemsByIndex[item.Value];
+                    //mStates[index] = LalrItemSet.Merge(mStates[index], item.Value);
                     mRecordedGotos.Add(Tuple.Create(thisIndex, item.Key), index);
                 }
                 else {
                     mStates.Add(item.Value);
-                    mItemsByIndex.Add(cs, mStates.Count - 1);
+                    //mItemsByIndex.Add(cs, mStates.Count - 1);
+                    mItemsByIndex.Add(item.Value, mStates.Count - 1);
                     mNextItems.Add(item.Value);
                     mRecordedGotos.Add(Tuple.Create(thisIndex, item.Key), mStates.Count - 1); 
                 }
