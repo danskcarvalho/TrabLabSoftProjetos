@@ -121,13 +121,13 @@ namespace Compilador.Lalr
                 if(mItemsByIndex.ContainsKey(cs)){
                     var index = mItemsByIndex[cs];
                     mStates[index] = LalrItemSet.Merge(mStates[index], item.Value);
-                    mRecordedGotos[Tuple.Create(thisIndex, item.Key)] = index;
+                    mRecordedGotos.Add(Tuple.Create(thisIndex, item.Key), index);
                 }
                 else {
                     mStates.Add(item.Value);
                     mItemsByIndex.Add(cs, mStates.Count - 1);
                     mNextItems.Add(item.Value);
-                    mRecordedGotos[Tuple.Create(thisIndex, item.Key)] = mStates.Count - 1; 
+                    mRecordedGotos.Add(Tuple.Create(thisIndex, item.Key), mStates.Count - 1); 
                 }
             }
         }
