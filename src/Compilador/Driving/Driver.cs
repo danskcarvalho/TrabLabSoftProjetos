@@ -13,7 +13,7 @@ namespace Compilador.Driving
 {
     public static class Driver
     {
-        public static void Run(string[] args)
+        public static Grammar.GrammarDefinition Run(string[] args)
         {
             try
             {
@@ -22,6 +22,7 @@ namespace Compilador.Driving
                 var grammar = Parser.Parse(source);
                 grammar.WriteToFile(driver_args.Output);
                 Console.WriteLine("Compilação finalizada.");
+                return grammar;
             }
             catch (GrammarException e)
             {
@@ -34,6 +35,7 @@ namespace Compilador.Driving
 #if DEBUG
             Console.ReadKey(true);
 #endif
+            return null;
         }
 
         private static void DisplayError(string message)

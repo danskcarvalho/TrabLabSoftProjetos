@@ -60,7 +60,9 @@ namespace API.Lexing
             }
             else
             {
-                var line_tk = TryLexKeyword(grammar.LineComment, grammar, mapping, source, ref offset);
+                Token line_tk = null;
+                if (!string.IsNullOrEmpty(grammar.LineComment))
+                    line_tk = TryLexKeyword(grammar.LineComment, grammar, mapping, source, ref offset);
                 if(line_tk != null)
                 {
                     int original = offset;
@@ -72,7 +74,9 @@ namespace API.Lexing
                 else
                 {
                     var before_block_tk = offset;
-                    var block_tk = TryLexKeyword(grammar.StartBlockComment, grammar, mapping, source, ref offset);
+                    Token block_tk = null;
+                    if (!string.IsNullOrEmpty(grammar.LineComment))
+                        block_tk = TryLexKeyword(grammar.StartBlockComment, grammar, mapping, source, ref offset);
                     if (block_tk != null)
                     {
                         int original = offset;

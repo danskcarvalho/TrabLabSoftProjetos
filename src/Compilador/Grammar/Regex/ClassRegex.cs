@@ -62,6 +62,9 @@ namespace Compilador.Grammar
 
         public override bool Lex(GrammarDefinition grammar, string source, ref int offset)
         {
+            if (offset >= source.Length)
+                return false;
+
             if (Contains(grammar, source[offset]))
             {
                 offset++;

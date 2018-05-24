@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace Compilador.Lalr
 {
@@ -21,7 +22,16 @@ namespace Compilador.Lalr
 
         public override string ToString()
         {
-            return $"{this.Count} states";
+            StringBuilder builder = new StringBuilder();
+            var currentIndex = 0;
+            foreach (var item in this)
+            {
+                builder.AppendLine($"state {currentIndex}");
+                builder.AppendLine($"-----------------------------------------------");
+                builder.AppendLine(item.ToString());
+                currentIndex++;
+            }
+            return builder.ToString();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace Compilador.Lalr
 {
@@ -20,6 +21,19 @@ namespace Compilador.Lalr
         public IEnumerable<LalrConflict> Conflicts => this.Where(y => y.Value.Count > 1).Select(y => y.Value.Any(x => x is LalrShift) ?
                                                                                                 new LalrConflict(LalrConflictType.ShiftReduce, y.Key, this) :
                                                                                                 new LalrConflict(LalrConflictType.ReduceReduce, y.Key, this));
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var item in this)
+            {
+                foreach (var action in item.Value)
+                {
+                    builder.AppendLine($"{item.Key} {action}");
+                }
+            }
+            return builder.ToString();
+        }
     }
     [Serializable]
     public abstract class LalrAction {
@@ -44,7 +58,7 @@ namespace Compilador.Lalr
 
         public override string ToString()
         {
-            return $"Shift {StateIndex}";
+            return $"shift {StateIndex}";
         }
     }
     [Serializable]
@@ -61,12 +75,17 @@ namespace Compilador.Lalr
 
         public override string ToString()
         {
-            return $"Reduce {Production.ToString()}";
+            return $"reduce {Production.ToString()}";
         }
     }
     [Serializable]
     public class LalrAccept : LalrAction {
         public LalrAccept() { }
+
+        public override string ToString()
+        {
+            return "accept";
+        }
     }
     [Serializable]
     public class LalrGoto : LalrAction {
@@ -87,7 +106,7 @@ namespace Compilador.Lalr
 
         public override string ToString()
         {
-            return $"Goto {StateIndex}";
+            return $"goto {StateIndex}";
         }
     }
 }

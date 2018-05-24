@@ -10,7 +10,8 @@ namespace Driver
     {
         static void Main(string[] args)
         {
-            Compilador.Driving.Driver.Run(args);
+            var grammar = Compilador.Driving.Driver.Run(args);
+            var parsed = API.Parsing.LalrParser.Parse(grammar, "(1 + 1)");
         }
     }
 }
