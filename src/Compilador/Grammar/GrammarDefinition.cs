@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Compilador.Grammar
 {
@@ -72,6 +73,15 @@ namespace Compilador.Grammar
         {
             BinaryFormatter bf = new BinaryFormatter();
             return (Grammar.GrammarDefinition)bf.Deserialize(stream);
+        }
+        public static GrammarDefinition ReadFromResource<T>(string resourceName)
+        {
+            var assembly = typeof(T).Assembly;
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                return ReadFromStream(stream);
+            }
         }
 
         private void ComputeTable()
@@ -169,6 +179,8 @@ namespace Compilador.Grammar
                     throw new GrammarException(r.Location, $"recursão infinita para {{{rr.Name}}}");
 
                 stack.Add(rr.Name);
+                if (IsReservedCharsetName(rr.Name))
+                    return;
                 ValidateNoRecursionCharset(CharsetDefinitions.First(x => x.Name == rr.Name).Expression, stack);
             }
             else if (r is CharsetBinaryExpression)

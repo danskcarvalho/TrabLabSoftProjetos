@@ -37,12 +37,16 @@ namespace Compilador.Grammar
             switch (Type)
             {
                 case QuantificationType.ZeroOrMore:
-                    while (Quantified.Lex(grammar, source, ref offset)) ;
+                    while (Quantified.Lex(grammar, source, ref offset))
+                    {
+                    }
                     return true;
                 case QuantificationType.OneOrMore:
                     if (!Quantified.Lex(grammar, source, ref offset))
                         return false;
-                    while (Quantified.Lex(grammar, source, ref offset)) ;
+                    while (Quantified.Lex(grammar, source, ref offset))
+                    {
+                    }
                     return true;
                 case QuantificationType.ZeroOrOne:
                     Quantified.Lex(grammar, source, ref offset);

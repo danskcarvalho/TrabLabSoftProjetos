@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0F61F82F-9E2E-4407-954E-BD9024921E4C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SqlInterpreter</RootNamespace>
+    <AssemblyName>SqlInterpreter</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlExecuter.cs" />
+    <Compile Include="SqlValue.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Grammar\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Grammar\BNFInput" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Grammar\BNFOutput" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\API\API.csproj">
+      <Project>{30BEE6F4-3DF8-448C-B18D-04DEDA8C2F74}</Project>
+      <Name>API</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compilador\Compilador.csproj">
+      <Project>{9ADB32DA-55BB-4921-A2DC-9D4D50577504}</Project>
+      <Name>Compilador</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

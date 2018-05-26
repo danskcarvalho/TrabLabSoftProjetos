@@ -1,0 +1,101 @@
+option StartSymbol = <Statement>
+option LineComment = '#'
+
+Identifier = {Letter} {LetterOrDigit}*
+Number = {Digit}+ ('.' {Digit}+)?
+String = \' {StringLetter}* \'
+
+{NotAllowed} = [\' \n]
+{StringLetter} = {Any - NotAllowed}
+
+<ValueExpression> =
+    Number |
+    String |
+    <ObjectValue> |
+    null |
+    true |
+    false |
+    <MemberAccess> |
+    round '(' <Expression> ')' |
+    abs '(' <Expression> ')' |
+    ceiling '(' <Expression> ')' |
+    floor '(' <Expression> ')' |
+    max '(' <Expression> ',' <Expression> ')' |
+    min '(' <Expression> ',' <Expression> ')' |
+    sign '(' <Expression> ')' |
+    trim '(' <Expression> ')' |
+    contains '(' <Expression> ',' <Expression> ')' |
+    any '(' <Expression> ')' |
+    any '(' <Select> ')' |
+    sum '(' <Expression> ')' |
+    sum '(' <Select> ')' |
+    max '(' <Expression> ')' |
+    max '(' <Select> ')' |
+    min '(' <Expression> ')' |
+    min '(' <Select> ')' |
+    avg '(' <Expression> ')' |
+    avg '(' <Select> ')' |
+    not '(' <Expression> ')' |
+    '(' <Expression> ')'
+
+<ObjectValue> = '{' <ObjectFieldList> '}'
+<ObjectField> = Identifier ':' <Expression>
+<ObjectFieldList> = <ObjectField> ',' <ObjectFieldList> | <ObjectField>
+
+<MemberAccess> = <MemberAccess> '.' Identifier | Identifier
+
+<Expression> = <Expression> and <RelationalExpression> |
+    <Expression> or <RelationalExpression> |
+    <RelationalExpression>
+
+<RelationalExpression> = <RelationalExpression> '=' <AddExpression> |
+    <RelationalExpression> '!=' <AddExpression> |
+    <RelationalExpression> '<' <AddExpression> |
+    <RelationalExpression> '>' <AddExpression> |
+    <RelationalExpression> '<=' <AddExpression> |
+    <RelationalExpression> '>=' <AddExpression> |
+    <AddExpression>
+
+<AddExpression> = <AddExpression> '+' <MultExpression> |
+    <AddExpression> '-' <MultExpression> |
+    <MultExpression>
+
+<MultExpression> = <MultExpression> '*' <ValueExpression> |
+    <MultExpression> '/' <ValueExpression> |
+    <ValueExpression>
+
+<FromSelect> = from Identifier in <FromSource> 
+<FromSource> = Identifier | '(' <Select> ')'
+<FromSelectList> = <FromSelect> <FromSelectList> | <FromSelect>
+
+<WhereClause> = where <Expression>
+
+<GroupBySelector> = <Expression> as Identifier
+<GroupBySelectorList> = <GroupBySelector> ',' <GroupBySelectorList> | <GroupBySelector>
+<GroupByClause> = groupby <GroupBySelectorList> into Identifier
+
+<OrderBySelect> = <Expression> | <Expression> asc | <Expression> desc 
+<OrderBySelectList> = <OrderBySelect> ',' <OrderBySelectList> | <OrderBySelect>
+<OrderByClause> = orderby <OrderBySelectList>
+
+<SelectClause> = select <ObjectValue>
+
+<WhereGroupByWhere> = <WhereClause> <GroupByClause> <WhereClause> | <WhereClause> <GroupByClause> | <GroupByClause> <WhereClause> | <WhereClause> | <>
+
+<OptionalOrderByClause> = <OrderByClause> | <>
+
+<Select> = <FromSelectList> <WhereGroupByWhere> <OptionalOrderByClause> <SelectClause>
+
+<Insert> = insert into Identifier <ObjectValue> | insert into Identifier '(' <Select> ')'
+ 
+<Delete> = delete from Identifier | delete from Identifier where <Expression>
+
+<Statement> = <Select> | <Insert> | <Delete>
+
+
+
+
+
+
+
+
