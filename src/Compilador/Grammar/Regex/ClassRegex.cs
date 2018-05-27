@@ -39,7 +39,7 @@ namespace Compilador.Grammar
         {
             foreach (var item in Elements)
             {
-                if (item.End != null)
+                if (item.End == null)
                 {
                     if (item.Start.Literal.Contains(c))
                         return true;

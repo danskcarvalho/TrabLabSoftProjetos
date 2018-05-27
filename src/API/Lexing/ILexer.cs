@@ -75,7 +75,7 @@ namespace API.Lexing
                 {
                     var before_block_tk = offset;
                     Token block_tk = null;
-                    if (!string.IsNullOrEmpty(grammar.LineComment))
+                    if (!string.IsNullOrEmpty(grammar.StartBlockComment))
                         block_tk = TryLexKeyword(grammar.StartBlockComment, grammar, mapping, source, ref offset);
                     if (block_tk != null)
                     {

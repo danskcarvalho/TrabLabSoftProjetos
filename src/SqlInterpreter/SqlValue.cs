@@ -16,12 +16,20 @@ namespace SqlInterpreter
     }
     public class SqlValue : IEquatable<SqlValue>, IComparable<SqlValue>
     {
+        public static readonly SqlValue Null = new SqlValue();
+
         public SqlValueType Type { get; private set; }
         public IReadOnlyDictionary<string, SqlValue> Object { get; private set; }
         public string String { get; private set; }
         public decimal Number { get; private set; }
         public bool Boolean { get; private set; }
         public IReadOnlyList<SqlValue> List { get; private set; }
+        public bool IsNull => Type == SqlValueType.Null;
+        public bool IsList => Type == SqlValueType.List;
+        public bool IsBoolean => Type == SqlValueType.Boolean;
+        public bool IsObject => Type == SqlValueType.Object;
+        public bool IsString => Type == SqlValueType.String;
+        public bool IsNumber => Type == SqlValueType.Number;
 
         private SqlValue()
         {
@@ -39,7 +47,7 @@ namespace SqlInterpreter
         }
         private SqlValue(decimal number)
         {
-            Type = SqlValueType.Null;
+            Type = SqlValueType.Number;
             this.Number = number;
         }
         private SqlValue(IReadOnlyDictionary<string, SqlValue> @object)

@@ -9,88 +9,91 @@ String = \' {StringLetter}* \'
 {StringLetter} = {Any - NotAllowed}
 
 <ValueExpression> =
-    Number |
-    String |
+    @Number Number |
+    @String String |
     <ObjectValue> |
-    null |
-    true |
-    false |
+    @Null null |
+    @True true |
+    @False false |
     <MemberAccess> |
-    round '(' <Expression> ')' |
-    abs '(' <Expression> ')' |
-    ceiling '(' <Expression> ')' |
-    floor '(' <Expression> ')' |
-    max '(' <Expression> ',' <Expression> ')' |
-    min '(' <Expression> ',' <Expression> ')' |
-    sign '(' <Expression> ')' |
-    trim '(' <Expression> ')' |
-    contains '(' <Expression> ',' <Expression> ')' |
-    any '(' <Expression> ')' |
-    any '(' <Select> ')' |
-    sum '(' <Expression> ')' |
-    sum '(' <Select> ')' |
-    max '(' <Expression> ')' |
-    max '(' <Select> ')' |
-    min '(' <Expression> ')' |
-    min '(' <Select> ')' |
-    avg '(' <Expression> ')' |
-    avg '(' <Select> ')' |
-    not '(' <Expression> ')' |
+    @Round round '(' <Expression> ')' |
+    @Abs abs '(' <Expression> ')' |
+    @Ceiling ceiling '(' <Expression> ')' |
+    @Floor floor '(' <Expression> ')' |
+    @Max2 max '(' <Expression> ',' <Expression> ')' |
+    @Min2 min '(' <Expression> ',' <Expression> ')' |
+    @Sign sign '(' <Expression> ')' |
+    @Trim trim '(' <Expression> ')' |
+    @Contains contains '(' <Expression> ',' <Expression> ')' |
+    @Any any '(' <Select> ')' |
+    @Sum sum '(' <Select> ')' |
+    @Max1 max '(' <Select> ')' |
+    @Min1 min '(' <Select> ')' |
+    @Avg avg '(' <Select> ')' |
+    @Not not '(' <Expression> ')' |
     '(' <Expression> ')'
 
-<ObjectValue> = '{' <ObjectFieldList> '}'
+<ObjectValue> = @ObjectValue '{' <ObjectFieldList> '}'
 <ObjectField> = Identifier ':' <Expression>
 <ObjectFieldList> = <ObjectField> ',' <ObjectFieldList> | <ObjectField>
 
-<MemberAccess> = <MemberAccess> '.' Identifier | Identifier
+<MemberAccess> = @MemberAccess <MemberAccess> '.' Identifier | @Identifier Identifier
 
-<Expression> = <Expression> and <RelationalExpression> |
-    <Expression> or <RelationalExpression> |
+<Expression> = @And <Expression> and <RelationalExpression> |
+    @Or <Expression> or <RelationalExpression> |
     <RelationalExpression>
 
-<RelationalExpression> = <RelationalExpression> '=' <AddExpression> |
-    <RelationalExpression> '!=' <AddExpression> |
-    <RelationalExpression> '<' <AddExpression> |
-    <RelationalExpression> '>' <AddExpression> |
-    <RelationalExpression> '<=' <AddExpression> |
-    <RelationalExpression> '>=' <AddExpression> |
+<RelationalExpression> = @Eq <RelationalExpression> '=' <AddExpression> |
+    @NotEq <RelationalExpression> '!=' <AddExpression> |
+    @Lt <RelationalExpression> '<' <AddExpression> |
+    @Gt <RelationalExpression> '>' <AddExpression> |
+    @LtEq <RelationalExpression> '<=' <AddExpression> |
+    @GtEq <RelationalExpression> '>=' <AddExpression> |
     <AddExpression>
 
-<AddExpression> = <AddExpression> '+' <MultExpression> |
-    <AddExpression> '-' <MultExpression> |
+<AddExpression> = @Add <AddExpression> '+' <MultExpression> |
+    @Sub <AddExpression> '-' <MultExpression> |
     <MultExpression>
 
-<MultExpression> = <MultExpression> '*' <ValueExpression> |
-    <MultExpression> '/' <ValueExpression> |
-    <ValueExpression>
+<NegateExpression> = @Neg '-' <ValueExpression> 
+               | <ValueExpression>
 
-<FromSelect> = from Identifier in <FromSource> 
-<FromSource> = Identifier | '(' <Select> ')'
+<MultExpression> = @Mult <MultExpression> '*' <NegateExpression> |
+    @Div <MultExpression> '/' <NegateExpression> |
+    <NegateExpression>
+
+<FromSelect> = @FromSelect from Identifier in <FromSource> 
+<FromSource> = @FromSourceId Identifier | @FromSourceSel '(' <Select> ')'
 <FromSelectList> = <FromSelect> <FromSelectList> | <FromSelect>
 
-<WhereClause> = where <Expression>
+<WhereClause> = @WhereFilter where <Expression>
 
 <GroupBySelector> = <Expression> as Identifier
 <GroupBySelectorList> = <GroupBySelector> ',' <GroupBySelectorList> | <GroupBySelector>
-<GroupByClause> = groupby <GroupBySelectorList> into Identifier
+<GroupByClause> = @GroupByClause groupby <GroupBySelectorList> into Identifier
 
 <OrderBySelect> = <Expression> | <Expression> asc | <Expression> desc 
 <OrderBySelectList> = <OrderBySelect> ',' <OrderBySelectList> | <OrderBySelect>
-<OrderByClause> = orderby <OrderBySelectList>
+<OrderByClause> = @OrderByClause orderby <OrderBySelectList>
 
-<SelectClause> = select <ObjectValue>
+<SelectClause> = @SelectClause select <Expression>
 
-<WhereGroupByWhere> = <WhereClause> <GroupByClause> <WhereClause> | <WhereClause> <GroupByClause> | <GroupByClause> <WhereClause> | <WhereClause> | <>
+<WhereGroupByWhere> = @WhereGroupByHaving <WhereClause> <GroupByClause> <WhereClause> | 
+    @WhereGroupBy <WhereClause> <GroupByClause> | 
+    @GroupByHaving <GroupByClause> <WhereClause> | 
+    @Where <WhereClause> | 
+    @GroupBy <GroupByClause> |
+    <>
 
 <OptionalOrderByClause> = <OrderByClause> | <>
 
-<Select> = <FromSelectList> <WhereGroupByWhere> <OptionalOrderByClause> <SelectClause>
+<Select> = @Select <FromSelectList> <WhereGroupByWhere> <OptionalOrderByClause> <SelectClause>
 
-<Insert> = insert into Identifier <ObjectValue> | insert into Identifier '(' <Select> ')'
+<Insert> = @InsertValue insert into Identifier <ObjectValue> | @InsertSelect insert into Identifier '(' <Select> ')'
  
-<Delete> = delete from Identifier | delete from Identifier where <Expression>
+<Delete> = @DeleteAll delete from Identifier | @DeleteWhere delete from Identifier where <Expression>
 
-<Statement> = <Select> | <Insert> | <Delete>
+<Statement> = @IsSelect <Select> | @IsInsert <Insert> | @IsDelete <Delete>
 
 
 
