@@ -163,7 +163,7 @@ namespace SqlInterpreter
                         return "{" + string.Join(", ", Object.Select(x => x.Key + ": " + x.Value.ToString())) + "}";
                     }
                 case SqlValueType.String:
-                    return this.String;
+                    return $"'{this.String}'";
                 default:
                     throw new InvalidOperationException();
             }
@@ -254,7 +254,7 @@ namespace SqlInterpreter
                             var cp = string.Compare(item.Item1.Key, item.Item2.Key, StringComparison.Ordinal);
                             if (cp != 0)
                                 return cp;
-                            cp = item.Item1.Value.CompareTo(item.Item2.Value);
+                            cp = item.Item2.Value.CompareTo(item.Item2.Value);
                             if (cp != 0)
                                 return cp;
                         }

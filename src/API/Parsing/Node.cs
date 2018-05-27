@@ -61,7 +61,7 @@ namespace API.Parsing
 
         public override string Name => _Name;
 
-        public ReducedNode(string name, GrammarProduction production, IEnumerable<Node> children) : base(children.First().Location)
+        public ReducedNode(string name, GrammarProduction production, IEnumerable<Node> children) : base(children.Any() ? children.First().Location : new Location())
         {
             this._Name = name;
             Production = production;

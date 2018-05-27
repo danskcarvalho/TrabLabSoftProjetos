@@ -45,7 +45,7 @@ namespace SqlInterpreter
                     {
                         return s =>
                         {
-                            return selectAttr[n](s); //run the select and return the list
+                            return selectAttr[n.Children[1]](s); //run the select and return the list
                         };
                     });
                 }
@@ -223,7 +223,7 @@ namespace SqlInterpreter
                             return new Scope(scoped);
                         }).ToList();
                         //retorna uma nova lista
-                        return list;
+                        return listScope;
                     };
                 });
             });
@@ -350,6 +350,7 @@ namespace SqlInterpreter
                                 throw new Exception("a expressão dentro de um where precisa ser um booleano");
                             return r.Boolean;
                         });
+                        globalCollections[id] = toBeDeleted;
                     };
                 });
             });
@@ -407,6 +408,7 @@ namespace SqlInterpreter
                 d.On("String", n => s => n.Children[0].Token.Source.Substring(1, n.Children[0].Token.Source.Length - 2));
                 d.On("Null", n => s => SqlValue.Null);
                 d.On("True", n => s => true);
+                d.On("False", n => s => false);
                 d.On("Round", n => s => Math.Round(exprAttr[n.Children[2]](s).Number));
                 d.On("Abs", n => s => Math.Abs(exprAttr[n.Children[2]](s).Number));
                 d.On("Ceiling", n => s => Math.Ceiling(exprAttr[n.Children[2]](s).Number));
@@ -451,6 +453,8 @@ namespace SqlInterpreter
                         foreach (var item in fields)
                         {
                             obj[item.Key] = exprAttr[item.Value](s);
+                            if (obj[item.Key].IsList)
+                                throw new Exception($"Campo {item.Key} não pode ser lista");
                         }
                         return obj;
                     };
@@ -461,6 +465,8 @@ namespace SqlInterpreter
                     {
                         var m = exprAttr[n.Children[0]](s);
                         var id = n.Children[2].Token.Source;
+                        if (m.IsNull || !m.Object.ContainsKey(id))
+                            return SqlValue.Null;
                         return m.Object[id];
                     };
                 });
@@ -543,7 +549,12 @@ namespace SqlInterpreter
         }
 
         private SqlValue ScopeToValue(Scope a){
-            return (SqlValue)a.Values;
+            Dictionary<string, SqlValue> values = new Dictionary<string, SqlValue>();
+            foreach (var item in a.Values)
+            {
+                values[item.Key] = item.Value;
+            }
+            return (SqlValue)values;
         }
         private Scope ValueToScope(SqlValue a)
         {
